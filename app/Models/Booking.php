@@ -100,7 +100,7 @@ class Booking extends Model
                     'langID' => 'IT',
                     'shopUserRef' => $this->user_email,
                     'shopID' => $this->user_booking_tracking_id,
-                    'amount' => 300 * 100,
+                    'amount' => $place_price * 100,
                     'addInfo1' => "Place id: ".$this->place_id,
                     'addInfo2' => "Check-in: ".$this->user_checkin,
                     'addInfo3' => "Check-out: ".$this->user_checkout,

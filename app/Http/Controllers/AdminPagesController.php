@@ -205,6 +205,14 @@ class AdminPagesController extends Controller
       $set_admin = SettingAdmin::orderBy('id')->first();
       return view('adminpages.settings')->with('set_admin', $set_admin);
     }
+
+    public function pricesettingsview(){
+      if(Auth::user()->role != "admin")
+        return redirect()->route('error.404');
+      $set_admin = SettingAdmin::orderBy('id')->first();
+      return view('adminpages.pricesetting')->with('set_admin', $set_admin);
+    }
+
     public function settingsemailContect(){
       if(Auth::user()->role != "admin")
         return redirect()->route('error.404');

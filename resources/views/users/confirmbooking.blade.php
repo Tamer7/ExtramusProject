@@ -25,7 +25,7 @@
                     <td colspan="2"><span><strong>{{ __('Place ID') }}: </strong></span></td>
                     <td colspan="2"><span>{{ $maparray['booking']->place_id }}</span></td>
                 </tr>
-                
+
                 <tr>
                     <td><span><strong>{{ __('Check-In') }}: </strong></span></td>
                     <td><span>{{ date("d/m/Y", strtotime($maparray['booking']->user_checkin)) }}</span></td>
@@ -106,14 +106,14 @@
                     <td colspan="2"><span><strong>{{ __('Total Price') }}: </strong></span></td>
                     <td colspan="2"><span>{{ $maparray['place']->price }} €</span></td>
                   </tr>
-                  <tr>
+                  {{-- <tr>
                     <td colspan="2"><span><strong>{{ __('Price paid now') }}: </strong></span></td>
                     <td colspan="2"><span>300 €</span></td>
-                  </tr>
-                  <tr>
+                  </tr> --}}
+                  {{-- <tr>
                     <td colspan="2"><span><strong>{{ __('Remaining price') }}: </strong></span></td>
                     <td colspan="2"><span>{{ $maparray['place']->price-300 }} €</span></td>
-                  </tr>
+                  </tr> --}}
 
                   @isset($maparray['booking']->user_promo)
                     @if ($maparray['booking']->user_promo == "0")

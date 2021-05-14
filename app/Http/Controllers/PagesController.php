@@ -66,14 +66,24 @@ class PagesController extends Controller
       $checkin_date = $req->t_start;
       $checkout_date = $req->t_end;
 
-      if($checkin_date=="null" || $checkout_date=="null")
+      if($checkin_date=="null")
         return redirect()->route('user.viewsmallplace', $map_name);
-      $nmofdays = ceil(abs(strtotime($checkout_date) - strtotime($checkin_date)) / 86400)+1;
+      $nmofdays = ($req->no_of_day)-1;
+      // $nmofdays = ceil(abs(strtotime($checkout_date) - strtotime($checkin_date)) / 86400)+1;
 
+      if(number_format($req->no_of_day)<=0)
+        $nmofdays = 0;
+      $checkout_date = $checkin_date;
 
-      if(isset($checkin_date)){
-        $bookinMonthExeed = $set_admin->allPlaceReservationClosed($checkin_date, $checkout_date);
+      if(isset($req->no_of_day)){
+        $date = $checkin_date;
+        $date = strtotime($date);
+        $date = strtotime("+".$nmofdays." day", $date);
+        $checkout_date = date('Y-m-d', $date);
       }
+      // if(isset($checkin_date)){
+      //   $bookinMonthExeed = $set_admin->allPlaceReservationClosed($checkin_date, $checkout_date);
+      // }
 
       $all_places = Place::where('map_name', $map_name)->get();
       $places = array();
@@ -88,9 +98,9 @@ class PagesController extends Controller
           $place->status = 0;
           $place->status = $booking->place_is_available($place->place_id, $checkin_date, $checkout_date);
           $place->status = $booking->place_is_available_subs($place->place_id, $checkin_date, $checkout_date, $place->status);
-          if($bookinMonthExeed){
-            $place->status = $booking->isFreeforFullmonth($place->place_id, $checkin_date, $checkout_date, $place->status);
-          }
+          // if($bookinMonthExeed){
+          //   $place->status = $booking->isFreeforFullmonth($place->place_id, $checkin_date, $checkout_date, $place->status);
+          // }
 
           array_push($places, $place);
         }
@@ -105,14 +115,14 @@ class PagesController extends Controller
           $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg' => $err_msg);
           return view('users.smallmap')->with('maparray', $maparray);
         }
-      }else if(number_format($req->no_of_day)>365){
+      }else if(number_format($req->no_of_day)>$set_admin->max_no_days){
         $err_msg= "error";
         // return redirect()->route('user.viewsmallplace', $map_name)->with('err_msg', $err_msg);
         $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg' => $err_msg);
         return view('users.smallmap')->with('maparray', $maparray);
 
       }
-      if(isset($req->t_start) && $nmofdays<$set_admin->max_no_days){
+      if(isset($req->t_start) && $nmofdays<$set_admin->min_no_days-1){
         $err_msg2 = "min day limit";
         $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
         return view('users.smallmap')->with('maparray', $maparray);

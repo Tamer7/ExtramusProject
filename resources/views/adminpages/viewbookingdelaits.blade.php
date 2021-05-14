@@ -37,7 +37,10 @@
               <label><strong>Tracking ID: </strong></label><label> &nbsp; {{ $Booking->user_booking_tracking_id }}</label><br>
               @isset($Booking->paid_ammount)
                 <label><strong>Total Amount: </strong></label><label> &nbsp; {{ $Booking->paid_ammount }} €</label><br>
-                @if ($Booking->user_payment_type!="Admin")
+                @if ($Booking->user_checkin < '2021-05-15')
+
+                @endif
+                @if ($Booking->user_payment_type!="Admin" && strtotime($Booking->created_at) < strtotime('2021-05-15'))
                   <label><strong>Paid Ammount: </strong></label><label> &nbsp; 300 €</label><br>
                   <label><strong>Remaining Ammount: </strong></label><label> &nbsp; {{ $Booking->paid_ammount-300 }} €</label><br>
                 @endif

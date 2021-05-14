@@ -13,8 +13,24 @@ class SettingAdmin extends Model
 {
     use HasFactory;
 
-
     public function calculatePrice($place, $checkin, $checkout, $numOfadults){
+      $numOfdays = date_diff(date_create($checkin), date_create($checkout));
+      $numOfdays->d = $numOfdays->d+1;
+      $price_tm = 0;
+      if($numOfadults == 1){
+        $price_tm = $this->adult1_price * $numOfdays->d;
+      }else if($numOfadults == 2){
+        $price_tm = $this->adult2_price * $numOfdays->d;
+      }else if($numOfadults == 3){
+        $price_tm = $this->adult3_price * $numOfdays->d;
+      }else if($numOfadults == 4){
+        $price_tm = $this->adult4_price * $numOfdays->d;
+      }
+
+      return $price_tm;
+    }
+
+    public function calculatePrice2($place, $checkin, $checkout, $numOfadults){
 
       $numOfdays = date_diff(date_create($checkin), date_create($checkout));
       $numOfdays->d = $this->datediffcount($checkin, $checkout);
@@ -104,7 +120,7 @@ class SettingAdmin extends Model
         }
 
         $numOFdays = $this->datediffcount($checkin, $checkout);
-        if($numOFdays >= $set_admin->max_no_days){
+        if($numOFdays <= $set_admin->max_no_days){
           return true;
         }
       }

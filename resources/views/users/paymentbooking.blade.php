@@ -106,14 +106,14 @@
                       <td colspan="2"><span><strong>{{ __('Total Price') }}: </strong></span></td>
                       <td colspan="2"><span>{{ $maparray['place']->price }} €</span></td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                       <td colspan="2"><span><strong>{{ __('Price paid now') }}: </strong></span></td>
                       <td colspan="2"><span>300 €</span></td>
                     </tr>
                     <tr>
                       <td colspan="2"><span><strong>{{ __('Remaining price') }}: </strong></span></td>
                       <td colspan="2"><span>{{ $maparray['place']->price-300 }} €</span></td>
-                    </tr>
+                    </tr> --}}
                 </table>
 
 
