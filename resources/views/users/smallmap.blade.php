@@ -85,7 +85,11 @@
                         </div> --}}
 
                         <div class="col-sm-4">
-                          <button id="src_sm_btn" type="submit" class="btn btn-info">{{ __('Update Map') }}</button>
+                          @isset($maparray['err_msg3'])
+                            <button id="src_sm_btn" type="submit" class="btn btn-info" disabled>{{ __('Update Map') }}</button>
+                          @else
+                            <button id="src_sm_btn" type="submit" class="btn btn-info">{{ __('Update Map') }}</button>
+                          @endisset
                         </div>
 
                       </div>

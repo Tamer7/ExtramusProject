@@ -31,7 +31,8 @@
                         <div class="container11">
                           <div class="t-datepicker">
                             <span id="t_start" class="t-check-in"></span>
-                            <span id="t_end" class="t-check-out" ></span>
+                            {{-- <span id="t_end" class="t-check-out" ></span> --}}
+                            <input id="searchdate_numberofdays" type="number" min="1" name="no_of_day" placeholder="Predefinito: 1">
                             @isset($maparray['err_msg'])
                               <span id="errormsg_txt" style="color:red;"> {{ __('You can book maximum') }} {{ $maparray["set_admin"]->max_no_days }} {{ __('days') }}.</span><br>
                             @endisset
@@ -157,7 +158,7 @@ var date = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+tomorrow.getDa
         limitDateRanges    :'365',
         titleCheckIn   :'{{ __('Check In') }}',
         titleCheckOut  :'{{ __('Check Out') }}',
-        numCalendar : 2,
+        numCalendar : 1,
         startDate: '{{ $set_admin->season_start }}',
         endDate: '{{ $set_admin->season_end }}',
         nextDayHighlighted   :false,
