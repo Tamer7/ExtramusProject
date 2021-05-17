@@ -54,25 +54,25 @@
                             $close_m = date('i', strtotime($maparray["set_admin"]->closing_time));
                             if((date('H')>=$close_h && date('i')>=$close_m) || (date('H')>=$close_hBig)){
                               $today = date("Y-m-d H:i");
-                              $startday = date("Y-m-d", strtotime("+3 day"));
+                              // extra booking day
+                              $startday = date("Y-m-d", strtotime("+2 day"));
                               $makestr = '+'.($maparray["set_admin"]->max_no_days+1)." day";
                             }else{
                               $today = date("Y-m-d H:i");
-                              $startday = date("Y-m-d", strtotime("+2 day"));
+                              $startday = date("Y-m-d", strtotime("+1 day"));
                             }
                             //
                             $endday = date("Y-m-d", strtotime($makestr));
                           }
                             $place_hold = '<i class="fa fa-arrow-right" aria-hidden="true"></i>'." Check-in";
                           @endphp
-                          <div class="t-datepicker">
+                          {{-- <div class="t-datepicker">
                               <span id="t_start" class="t-check-in"></span>
                               <span id="t_end" class="t-check-out" onchange="updateMapsubmit()"></span>
-                              {{-- <input id="searchdate_numberofdays" type="number" name="no_of_day" placeholder="{{ __('Number of days') }}: 1"> --}}
-                          </div>
-                          {{-- <input placeholder="⇉ Check-in" class="cal_style" type="text" onfocus="(this.type='date')" id="t_start" name="t_start" min='{{ $startday }}' max='{{ $endday }}' required> --}}
+                          </div> --}}
+                          <input placeholder="⇉ Check-in" class="cal_style" type="text" onfocus="(this.type='date')" id="t_start" name="t_start" min='{{ $startday }}' max='{{ $endday }}' required>
                           {{-- <input class="cal_style" placeholder="DD/MM/YYYY" type="date" id="t_start" name="t_start" min='{{ $startday }}' max='{{ $endday }}'> --}}
-                          {{-- <input id="searchdate_numberofdays" min="0" max="{{ $maparray["set_admin"]->max_no_days }}" type="number" name="no_of_day" placeholder="{{ __('Number of days') }}: 1"> --}}
+                          <input id="searchdate_numberofdays" min="0" max="{{ $maparray["set_admin"]->max_no_days }}" type="number" name="no_of_day" placeholder="{{ __('Number of days') }}: 1">
                           @isset($maparray['err_msg'])
                             <span id="errormsg_txt" style="color:red;"> {{ __('You can book maximum') }} {{ $maparray["set_admin"]->max_no_days }} {{ __('days') }}.</span><br>
                           @endisset
@@ -80,15 +80,18 @@
 
                           <br><span id="errormsg_txt" style="color:red;display:none;"> {{ __('Arrival day is not selected') }}. </span><br>
                         </div>
+                        {{-- <div class="col-sm-4">
+
+                        </div> --}}
+
                         <div class="col-sm-4">
                           @isset($maparray['err_msg3'])
-                            @php
-                              $maparray["set_admin"]->max_no_days = -1;
-                            @endphp
-                            <span id="errormsg_txt1" style="color:red;">Booking Start- {{ date("d/m/Y, g:i A", strtotime($maparray["set_admin"]->booking_start)) }}</span><br>
-                            <span id="errormsg_txt1" style="color:red;">Booking End- {{ date("d/m/Y, g:i A", strtotime($maparray["set_admin"]->booking_end)) }}</span>
+                            <button id="src_sm_btn" type="submit" class="btn btn-info" disabled>{{ __('Update Map') }}</button>
+                          @else
+                            <button id="src_sm_btn" type="submit" class="btn btn-info">{{ __('Update Map') }}</button>
                           @endisset
                         </div>
+
                       </div>
               </form>
           </div>

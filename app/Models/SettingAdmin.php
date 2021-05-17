@@ -13,8 +13,25 @@ class SettingAdmin extends Model
 {
     use HasFactory;
 
-
     public function calculatePrice($place, $checkin, $checkout, $numOfadults){
+      $numOfdays = date_diff(date_create($checkin), date_create($checkout));
+      $numOfdays->d = $numOfdays->d+1;
+      $price_tm = 0;
+      if($numOfadults == 1){
+        $price_tm = $this->adult1_price * $numOfdays->d;
+      }else if($numOfadults == 2){
+        $price_tm = $this->adult2_price * $numOfdays->d;
+      }else if($numOfadults == 3){
+        $price_tm = $this->adult3_price * $numOfdays->d;
+      }else if($numOfadults == 4){
+        $price_tm = $this->adult4_price * $numOfdays->d;
+      }
+
+      return $price_tm;
+    }
+
+    // for Monthly price calculation
+    public function calculatePriceMonthly($place, $checkin, $checkout, $numOfadults){
 
       $numOfdays = date_diff(date_create($checkin), date_create($checkout));
       $numOfdays->d = $this->datediffcount($checkin, $checkout);
@@ -96,6 +113,7 @@ class SettingAdmin extends Model
       if(isset($checkin) && isset($checkout) && $checkout >= $checkin){
         $set_admin = SettingAdmin::orderBy('id')->first();
 
+
         if(strtotime($checkin) < strtotime($set_admin->season_start) || strtotime($checkout) < strtotime($set_admin->season_start)){
           return false;
         }
@@ -103,10 +121,33 @@ class SettingAdmin extends Model
           return false;
         }
 
-        $numOFdays = $this->datediffcount($checkin, $checkout);
-        if($numOFdays >= $set_admin->max_no_days){
-          return true;
+
+        // check for booking is according to server time
+        $makestr = '+'.($set_admin->max_no_days)." day";
+        $close_h = date('H', strtotime($set_admin->closing_time));
+        $close_hBig = date('H', strtotime($set_admin->closing_time)+60*60);
+        $close_m = date('i', strtotime($set_admin->closing_time));
+        if((date('H')>=$close_h && date('i')>=$close_m) || (date('H')>=$close_hBig)){
+          $today = date("Y-m-d H:i");
+          $startday = date("Y-m-d", strtotime("+2 day"));
+          $makestr = '+'.($set_admin->max_no_days+1)." day";
+        }else{
+          $today = date("Y-m-d H:i");
+          $startday = date("Y-m-d", strtotime("+1 day"));
         }
+
+        $endday = date("Y-m-d", strtotime($checkin.$makestr));
+        if($startday<=$checkin && $endday>=$checkout){
+          // not 404 error
+          return true;
+
+        }
+
+        // $numOFdays = $this->datediffcount($checkin, $checkout);
+        // if($numOFdays <= $set_admin->max_no_days){
+        //   return true;
+        // }
+
       }
         return false;
     }

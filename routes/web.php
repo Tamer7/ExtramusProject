@@ -88,9 +88,13 @@ Route::group(['prefix' => 'admin'], function(){
 
 
     Route::get('/settings', [App\Http\Controllers\AdminPagesController::class, 'settingsview'])->name('admin.settings');
+    Route::post('/settings/update', [App\Http\Controllers\AdminPagesController::class, 'settingsupdate'])->name('admin.settings.update');
+
+    Route::get('/settings/price', [App\Http\Controllers\AdminPagesController::class, 'pricesettingsview'])->name('admin.settings.price');
+
     Route::get('/settings/email', [App\Http\Controllers\AdminPagesController::class, 'settingsemailContect'])->name('admin.settings.email');
     Route::post('/settings/email/update', [App\Http\Controllers\AdminPagesController::class, 'settingsemailContectupdate'])->name('admin.settings.email.update');
-    Route::post('/settings/update', [App\Http\Controllers\AdminPagesController::class, 'settingsupdate'])->name('admin.settings.update');
+
 
 
     Route::get('/help', [App\Http\Controllers\HomeController::class, 'helpview'])->name('admin.help');

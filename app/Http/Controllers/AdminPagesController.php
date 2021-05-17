@@ -53,9 +53,20 @@ class AdminPagesController extends Controller
           array_push($error_msg, "Check-in date is not set.");
         }
         $checkin_date = $request->t_start;
-        $checkout_date = $request->t_end;
+        $checkout_date = ($request->no_of_day)-1;
 
         $nmofdays = ($request->no_of_day)-1;
+
+        // handle validation for num of day
+        if(number_format($request->no_of_day)<=0)
+          $nmofdays = 0;
+        $checkout_date = $checkin_date;
+        if(isset($request->no_of_day)){
+          $date = $checkin_date;
+          $date = strtotime($date);
+          $date = strtotime("+".$nmofdays." day", $date);
+          $checkout_date = date('Y-m-d', $date);
+        }
 
 
         $booking = new Booking;
@@ -205,6 +216,14 @@ class AdminPagesController extends Controller
       $set_admin = SettingAdmin::orderBy('id')->first();
       return view('adminpages.settings')->with('set_admin', $set_admin);
     }
+
+    public function pricesettingsview(){
+      if(Auth::user()->role != "admin")
+        return redirect()->route('error.404');
+      $set_admin = SettingAdmin::orderBy('id')->first();
+      return view('adminpages.pricesetting')->with('set_admin', $set_admin);
+    }
+
     public function settingsemailContect(){
       if(Auth::user()->role != "admin")
         return redirect()->route('error.404');

@@ -184,20 +184,40 @@
                           <span class="menu-collapsed">{{ __('Staffs') }}</span>
                       </div>
                   </a>
-                  <a href="{{ route('admin.settings') }}" class="bg-dark list-group-item list-group-item-action">
+
+                  {{-- start setting submenu --}}
+                  <a href="#submenu3" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
     	                <div class="d-flex w-100 justify-content-start align-items-center">
-    	                    <span class="fa fa-cog fa-fw mr-3"></span>
-    	                    {{-- <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">pro</span></span> --}}
+    	                    <span class="fa fa-cog fa-fw mr-3" aria-hidden="true"></span>
     	                    <span class="menu-collapsed">{{ __('Settings') }}</span>
+    	                    <span class="submenu-icon ml-auto"></span>
     	                </div>
     	            </a>
-                  <a href="{{ route('admin.settings.email') }}" class="bg-dark list-group-item list-group-item-action">
-    	                <div class="d-flex w-100 justify-content-start align-items-center">
-    	                    <span class="fa fa-envelope fa-fw mr-3"></span>
-    	                    {{-- <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">pro</span></span> --}}
-    	                    <span class="menu-collapsed">{{ __('Email Settings') }}</span>
-    	                </div>
-    	            </a>
+    	            <!-- Submenu content -->
+    	            <div id='submenu3' class="collapse sidebar-submenu">
+                      <a href="{{ route('admin.settings.price') }}" class="list-group-item list-group-item-action bg-dark text-white">
+                        <span class="fa fa-eur fa-fw mr-3"></span>
+                        {{-- <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">pro</span></span> --}}
+                        <span class="menu-collapsed">{{ __('Pricing') }}</span>
+                      </a>
+
+
+    	                <a href="{{ route('admin.settings') }}" class="list-group-item list-group-item-action bg-dark text-white">
+                          <span class="fa fa-calendar fa-fw mr-3"></span>
+                          {{-- <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">pro</span></span> --}}
+    	                    <span class="menu-collapsed">Schedule</span>
+    	                </a>
+
+    	                <a href="{{ route('admin.settings.email') }}" class="list-group-item list-group-item-action bg-dark text-white">
+                          <span class="fa fa-envelope fa-fw mr-3"></span>
+                          {{-- <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">pro</span></span> --}}
+    	                    <span class="menu-collapsed">{{ __('Email Template') }}</span>
+    	                </a>
+
+
+    	            </div>
+                  {{-- end setting submenu --}}
+
                 @endif
 
   	            <!-- Separator without title -->
@@ -222,7 +242,7 @@
         <footer class="page-footer font-small bg-primary marginTop20">
 
           <!-- Copyright -->
-          <div class="footer-copyright text-center py-3">© 2020 Copyright:
+          <div class="footer-copyright text-center py-3">© 2020-2021 Copyright:
             <a href="/" class="text-white"> <strong>Negombo</strong></a>
           </div>
           <!-- Copyright -->

@@ -35,7 +35,9 @@
 
                             </div>
                         </div>
-                        <br><hr>
+                        <br>
+                        <h5>Web Staring Time</h5>
+                        <hr>
                         <div class="form-group row">
                             <label for="startingtime" class="col-md-4 col-form-label text-md-right">{{ __('Starting Time') }}(m-d-y)</label>
                             <div class="col-md-6">
@@ -50,7 +52,9 @@
 
                             </div>
                         </div>
-                        <br><hr>
+                        <br>
+                        <h5>Reservation Day Date</h5>
+                        <hr>
                         <div class="form-group row">
                             <label for="seasonStart" class="col-md-4 col-form-label text-md-right">{{ __('Season Start') }}(m-d-y)</label>
                             <div class="col-md-6">
