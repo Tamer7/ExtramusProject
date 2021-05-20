@@ -88,7 +88,7 @@ class BookingController extends Controller
             $booking->save();
             \Mail::to($booking->user_email)->send(new SendMail($maparray));
             \Mail::to("info@spiaggiasanmontano.it")->send(new SendMail($maparray));
-
+            \Mail::to("cassa@spiaggiasanmontano.it")->send(new SendMail($maparray));
             // make free the place after booking is confirmed
             $temp_book = new TempBooking;
             $temp_book->makeFree($booking->place_id, $booking->checkin);
