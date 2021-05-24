@@ -255,7 +255,7 @@ class AdminPagesController extends Controller
 
       $set_admin->save();
 
-      return redirect()->route('admin');
+      return redirect()->route('admin.settings.price');
     }
 
 
