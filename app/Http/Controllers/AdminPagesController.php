@@ -220,7 +220,7 @@ class AdminPagesController extends Controller
     public function pricesettingsview(){
       if(Auth::user()->role != "admin")
         return redirect()->route('error.404');
-      $set_admin = SettingAdmin::orderBy('id')->first();
+      $set_admin = SettingAdmin::orderBy('id')->get();
       return view('adminpages.pricesetting')->with('set_admin', $set_admin);
     }
 
@@ -239,6 +239,25 @@ class AdminPagesController extends Controller
       $set_admin->save();
       return redirect()->route('admin.settings.email');
     }
+
+    public function settingsupdateprices(Request $request){
+      if(Auth::user()->role != "admin")
+        return redirect()->route('error.404');
+      $set_admin = SettingAdmin::find($request->id);
+      $set_admin->adult1_price = $request->week_adult1_price;
+      $set_admin->adult2_price = $request->week_adult2_price;
+      $set_admin->adult3_price = $request->week_adult3_price;
+      $set_admin->adult4_price = $request->week_adult4_price;
+      $set_admin->adult1_price_weekend = $request->weekend_adult1_price;
+      $set_admin->adult2_price_weekend = $request->weekend_adult2_price;
+      $set_admin->adult3_price_weekend = $request->weekend_adult3_price;
+      $set_admin->adult4_price_weekend = $request->weekend_adult4_price;
+
+      $set_admin->save();
+
+      return redirect()->route('admin');
+    }
+
 
     public function settingsupdate(Request $request){
       if(Auth::user()->role != "admin")

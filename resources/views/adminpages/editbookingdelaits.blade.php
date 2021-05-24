@@ -24,12 +24,6 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Surname') }}: </label>
-                        <div class="col-md-6">
-                          <input type="text" class="form-control" name="user_surname" value="{{ $Booking->user_surname }}" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}: </label>
                         <div class="col-md-6">
                           <input type="email" class="form-control" name="user_email" value="{{ $Booking->user_email }} " required>
@@ -74,7 +68,9 @@
                     <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Booking Date') }}:  </label>
                         <div class="col-md-6">
-                          <div class="t-datepicker" id="booking_day_start"><span class="t-check-in" name="booking_day_start"></span><span name="booking_day_end" class="t-check-out"></span></div>
+                          <div class="t-datepicker" id="booking_day_start"><span class="t-check-in" name="booking_day_start"></span>
+                          <input class="t-check-out" id="searchdate_numberofdays" type="number" min="1" name="booking_day_end" placeholder="Predefinito: 1"></div>
+                          
                         </div>
                     </div>
                     @isset($Booking->user_promo)
@@ -119,7 +115,6 @@ $(document).ready(function(){
      limitDateRanges    : 365,
      dateCheckIn: '{{ $Booking->user_checkin }}',
      dateCheckOut: '{{ $Booking->user_checkout }}',
-
    });
  });
 </script>
