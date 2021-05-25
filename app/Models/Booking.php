@@ -14,6 +14,12 @@ class Booking extends Model
     use HasFactory;
     public function check_availability(){
       // check the place id matching first
+      $bookings_exits = Booking::where('place_id',$this->place_id)
+                                ->where('is_approved', 1)->get();
+      foreach ($bookings_exits as $booking) {
+      if($this->user_checkin == $booking->user_checkin && $this->user_checkout == $booking->user_checkout)
+      return true;
+      }
       $temp_book = new TempBooking;
       if($temp_book->isBusy($this->place_id, $this->checkin)) return false;
       $status = 0;
@@ -161,5 +167,15 @@ class Booking extends Model
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
+
+    public function datediffcount($checkin, $checkout){
+      $checkin = strtotime($checkin);
+      $checkout = strtotime($checkout);
+      $datediff = $checkout-$checkin;
+        if(round($datediff / (60 * 60 * 24))<0){
+          return 0;
+        }
+      return round($datediff / (60 * 60 * 24));
+  }
 
 }

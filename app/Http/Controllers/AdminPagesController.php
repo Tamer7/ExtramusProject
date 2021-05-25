@@ -371,13 +371,17 @@ class AdminPagesController extends Controller
     }
     public function editbookingdelaits($id){
       $Booking = Booking::where('id', $id)->first();
+      $days=$Booking->datediffcount($Booking->user_checkin,$Booking->user_checkout);
+      $Booking->user_checkout = $days;
       return view('adminpages.editbookingdelaits')->with('Booking', $Booking);
     }
     public function updatebookingdelaits(Request $request){
       $booking_id = $request->booking_id;
       $Booking = Booking::where('id', $booking_id)->first();
-      $Booking->user_fullname = $request->user_fullname;
-      $Booking->user_surname = $request->user_surname;
+      $user_name = trim($request->user_fullname);
+      $user_surname = (strpos($user_name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $user_name);
+      $Booking->user_fullname = $user_name;
+      $Booking->user_surname = $user_surname;
       $Booking->user_email = $request->user_email;
       $Booking->user_phone = $request->user_phone;
       if(isset($request->guest_surname1))
@@ -386,9 +390,10 @@ class AdminPagesController extends Controller
         $Booking->guest_surname1 = $request->guest_surname2;
       if(isset($request->guest_surname3))
         $Booking->guest_surname1 = $request->guest_surname3;
-
       $Booking->user_checkin = $request->t_start;
-      $Booking->user_checkout = $request->t_end;
+      $user_checkout = $request->booking_day_end;
+      $user_checkout = date('Y-m-d', strtotime("+".$user_checkout." day", strtotime($request->t_start)));
+      $Booking->user_checkout =  $user_checkout;
       if($Booking->check_availability()){
         $Booking->save();
         return redirect()->route('admin.booking.viewbookings');

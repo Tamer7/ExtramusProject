@@ -69,7 +69,7 @@
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Booking Date') }}:  </label>
                         <div class="col-md-6">
                           <div class="t-datepicker" id="booking_day_start"><span class="t-check-in" name="booking_day_start"></span>
-                          <input class="t-check-out" id="searchdate_numberofdays" type="number" min="1" name="booking_day_end" placeholder="Predefinito: 1"></div>
+                          <input class="t-check-out" id="searchdate_numberofdays" type="number" min="1" name="booking_day_end" value={{ $Booking->user_checkout }} required></div>
                           
                         </div>
                     </div>
