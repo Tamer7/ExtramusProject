@@ -372,7 +372,7 @@ class AdminPagesController extends Controller
     public function editbookingdelaits($id){
       $Booking = Booking::where('id', $id)->first();
       $days=$Booking->datediffcount($Booking->user_checkin,$Booking->user_checkout);
-      $Booking->user_checkout = $days;
+      $Booking->user_days = $days;
       return view('adminpages.editbookingdelaits')->with('Booking', $Booking);
     }
     public function updatebookingdelaits(Request $request){
