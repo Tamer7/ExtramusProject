@@ -398,7 +398,7 @@ class AdminPagesController extends Controller
         $Booking->save();
         return redirect()->route('admin.booking.viewbookings');
       }else{
-        return redirect()->route('error.404');
+        return back()->withErrors(['Place is not available for this time. Please choose another dates!']);
       }
     }
 

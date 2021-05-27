@@ -7,7 +7,10 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body"> 
+              @if($errors->any())            
+                  <li class="text-danger">{{$errors->first()}}</li>      
+              @endif      
               <form action="{{ route('admin.booking.updatebookingdelaits') }}" method="POST">
                     {{ csrf_field() }}
                     <input type="hidden" class="form-control" name="booking_id" value="{{ $Booking->id }}">
