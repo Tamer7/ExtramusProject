@@ -391,7 +391,7 @@ class AdminPagesController extends Controller
       if(isset($request->guest_surname3))
         $Booking->guest_surname1 = $request->guest_surname3;
       $Booking->user_checkin = $request->t_start;
-      $user_checkout = $request->booking_day_end;
+      $user_checkout = $request->booking_day_end-1;
       $user_checkout = date('Y-m-d', strtotime("+".$user_checkout." day", strtotime($request->t_start)));
       $Booking->user_checkout =  $user_checkout;
       if($Booking->check_availability()){
