@@ -34,10 +34,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="promocode" class="col-md-4 col-form-label text-md-right">{{ __('Promo User Name') }}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="promo_user" value="{{ $promo->promo_user }}">
-                            </div>
+                          <label for="promocode" class="col-md-4 col-form-label text-md-right">{{ __('Promo User Name') }}</label>
+                          <div class="col-md-6">
+                              <input type="text" class="form-control" name="promo_user" value="{{ $promo->promo_user }}" required>
+                          </div>
                         </div>
 
                         <div class="form-group row">
@@ -48,25 +48,25 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Agreement Type') }}</label>
-                            <div class="col-md-6">
-                              <select class="form-control" name="promo_type">
-                                  @if ($promo->promo_type == 'F2')
-                                    <option value="F2" selected>{{ __('F2') }}</option>
-                                    <option value="F3">{{ __('F3') }}</option>
-                                    <option value="F8">{{ __('F8') }}</option>
-                                  @elseif ($promo->promo_type == 'F3')
-                                    <option value="F2">{{ __('F2') }}</option>
-                                    <option value="F3" selected>{{ __('F3') }}</option>
-                                    <option value="F8">{{ __('F8') }}</option>
-                                  @elseif ($promo->promo_type == 'F8')
-                                    <option value="F2">{{ __('F2') }}</option>
-                                    <option value="F3">{{ __('F3') }}</option>
-                                    <option value="F8" selected>{{ __('F8') }}</option>
-                                  @endif
-                              </select>
-                            </div>
-                        </div>
+                          <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Agreement Type') }}</label>
+                          <div class="col-md-6">
+                            <select class="form-control" name="promo_type">
+                              @if ($promo->promo_type == "F2")
+                                <option value="F2" selected>{{ __('F2') }}</option>
+                                <option value="F3">{{ __('F3') }}</option>
+                                <option value="F8">{{ __('F8') }}</option>
+                              @elseif ($promo->promo_type == "F3")
+                                <option value="F2">{{ __('F2') }}</option>
+                                <option value="F3" selected>{{ __('F3') }}</option>
+                                <option value="F8">{{ __('F8') }}</option>
+                              @else
+                                <option value="F2">{{ __('F2') }}</option>
+                                <option value="F3">{{ __('F3') }}</option>
+                                <option value="F8" selected>{{ __('F8') }}</option>
+                              @endif
+                            </select>
+                          </div>
+                      </div>
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Promo Validity') }}</label>

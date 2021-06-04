@@ -143,6 +143,7 @@
 
 			</div>
 			<a href="{{ route('user.viewsmallplace') }}">Go TO Negombo</a>
+      <a href="{{ route('user.viewsmallplace') }}">Go TO Negombo</a>
 		</div>
 	</div>
 
