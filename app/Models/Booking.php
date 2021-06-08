@@ -18,8 +18,14 @@ class Booking extends Model
       if($temp_book->isBusy($this->place_id, $this->checkin)) return false;
       $status = 0;
       $booking = new Booking;
-      $status = $booking->place_is_available($this->place_id, $this->user_checkin, $this->user_checkout);
-      $status = $booking->place_is_available_subs($this->place_id, $this->user_checkin, $this->user_checkout, $status);
+      $book_id=$this->id;
+      if($book_id == null){
+        $status = $booking->place_is_available($this->place_id, $this->user_checkin, $this->user_checkout);
+        $status = $booking->place_is_available_subs($this->place_id, $this->user_checkin, $this->user_checkout, $status);
+      }else{
+        $status = $booking->edit_place_is_available($book_id,$this->place_id, $this->user_checkin, $this->user_checkout);
+        $status = $booking->edit_place_is_available_subs($book_id,$this->place_id, $this->user_checkin, $this->user_checkout, $status);
+      }
       // to avoid gray and green
       if($status==0) return true;
       else return false;
@@ -67,22 +73,74 @@ class Booking extends Model
 
     public function place_is_available_subs($place_id, $userCheckin, $usercheckout, $status){
       // make all returns 2 replace with 1 for gray
-      // $temp_book = new TempBooking;
-      // if($temp_book->isBusy($place_id, $userCheckin)) return $status;
-      //
-      // $bookings_exits = Booking::where('place_id',$place_id)
-      //                             ->where('is_approved', 1)
-      //                             ->where('user_payment_type', 'Agreements')->get();
-      // foreach ($bookings_exits as $booking) {
-      //     if($userCheckin >= $booking->user_checkin && $userCheckin <= $booking->user_checkout)
-      //       return 2;
-      //     if($usercheckout >= $booking->user_checkin && $usercheckout <= $booking->user_checkout)
-      //         return 2;
-      //     if($userCheckin <= $booking->user_checkin && $usercheckout >= $booking->user_checkout)
-      //         return 2;
-      // }
+      $temp_book = new TempBooking;
+      if($temp_book->isBusy($place_id, $userCheckin)) return $status;
+      
+      $bookings_exits = Booking::where('place_id',$place_id)
+                                  ->where('is_approved', 1)
+                                  ->where('user_payment_type', 'Agreements')->get();
+      foreach ($bookings_exits as $booking) {
+          if($userCheckin >= $booking->user_checkin && $userCheckin <= $booking->user_checkout)
+            return 2;
+          if($usercheckout >= $booking->user_checkin && $usercheckout <= $booking->user_checkout)
+              return 2;
+          if($userCheckin <= $booking->user_checkin && $usercheckout >= $booking->user_checkout)
+              return 2;
+      }
       return $status;
     }
+
+    //editing reservation
+    public function edit_place_is_available($book_ID,$place_id, $userCheckin, $usercheckout){
+
+      $got1dayeirlier = date('Y-m-d', strtotime("-1 day", strtotime($userCheckin)));
+      $got1daylater = date('Y-m-d', strtotime("+15 day", strtotime($userCheckin)));
+
+      $temp_book = new TempBooking;
+      if($temp_book->isBusy($place_id, $userCheckin)) return 2;
+      // ToDo try to make lower complexity
+      $bookings_exits = Booking::where('place_id',$place_id)
+                                  // ->where('user_checkin', '>', $got1dayeirlier)
+                                  // ->orWhere('user_checkin', '<', $got1daylater)
+                                  // ->where('user_checkout', '>=', $usercheckout)
+                                  ->where('is_approved', 1)
+                                  ->whereNotIn('id',[$book_ID])
+                                  ->get();
+      foreach ($bookings_exits as $booking) {
+          if($userCheckin >= $booking->user_checkin && $userCheckin <= $booking->user_checkout)
+            return 2;
+          if($usercheckout >= $booking->user_checkin && $usercheckout <= $booking->user_checkout)
+              return 2;
+          if($userCheckin <= $booking->user_checkin && $usercheckout >= $booking->user_checkout)
+              return 2;
+      }
+      return 0;
+    }
+
+    //editing reservation
+    public function edit_place_is_available_subs($book_ID,$place_id, $userCheckin, $usercheckout, $status){
+      // make all returns 2 replace with 1 for gray
+      $temp_book = new TempBooking;
+      if($temp_book->isBusy($place_id, $userCheckin)) return $status;
+      
+      $bookings_exits = Booking::where('place_id',$place_id)
+                                  ->where('is_approved', 1)
+                                  ->where('user_payment_type', 'Agreements')
+                                  ->whereNotIn('id', [$book_ID])
+                                  ->get();
+      foreach ($bookings_exits as $booking) {
+          if($userCheckin >= $booking->user_checkin && $userCheckin <= $booking->user_checkout)
+            return 2;
+          if($usercheckout >= $booking->user_checkin && $usercheckout <= $booking->user_checkout)
+              return 2;
+          if($userCheckin <= $booking->user_checkin && $usercheckout >= $booking->user_checkout)
+              return 2;
+      }
+      return $status;
+    }
+
+
+    
 
 // https://pagamenti.unicredit.it/UNI_CG_BO_WEB/
     public function paywithCard($place_price){
@@ -161,5 +219,15 @@ class Booking extends Model
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
+
+    public function datediffcount($checkin, $checkout){
+      $checkin = strtotime($checkin);
+      $checkout = strtotime($checkout);
+      $datediff = $checkout-$checkin;
+        if(round($datediff / (60 * 60 * 24))<0){
+          return 0;
+        }
+      return round($datediff / (60 * 60 * 24)+1);
+  }
 
 }

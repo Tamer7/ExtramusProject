@@ -2,7 +2,7 @@
 
 @section('section')
   <div class="container paddingTop20">
-    <h1>Negombo All View Bookings</h1>
+    <h1>Spiaggia All View Bookings</h1>
     <hr>
     <div class="row">
         <div class="col-sm-12">

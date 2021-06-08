@@ -2,12 +2,15 @@
 
 @section('section')
   <div class="container paddingTop20">
-    <h1>Negombo Edit Bookings</h1>
+    <h1>Spiaggia Edit Bookings</h1>
     <hr>
     <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-            <div class="card-body">
+            <div class="card-body"> 
+              @if($errors->any())            
+                  <li class="text-danger">{{$errors->first()}}</li>      
+              @endif      
               <form action="{{ route('admin.booking.updatebookingdelaits') }}" method="POST">
                     {{ csrf_field() }}
                     <input type="hidden" class="form-control" name="booking_id" value="{{ $Booking->id }}">
@@ -21,12 +24,6 @@
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Full Name') }}: </label>
                         <div class="col-md-6">
                           <input type="text" class="form-control" name="user_fullname" value="{{ $Booking->user_fullname }}" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Surname') }}: </label>
-                        <div class="col-md-6">
-                          <input type="text" class="form-control" name="user_surname" value="{{ $Booking->user_surname }}" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -74,7 +71,9 @@
                     <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Booking Date') }}:  </label>
                         <div class="col-md-6">
-                          <div class="t-datepicker" id="booking_day_start"><span class="t-check-in" name="booking_day_start"></span><span name="booking_day_end" class="t-check-out"></span></div>
+                          <div class="t-datepicker" id="booking_day_start"><span class="t-check-in" name="booking_day_start"></span>
+                          <input class="t-check-out" id="searchdate_numberofdays" type="number" min="1" name="booking_day_end" value={{ $Booking->user_days }} required></div>
+                          
                         </div>
                     </div>
                     @isset($Booking->user_promo)
@@ -119,7 +118,6 @@ $(document).ready(function(){
      limitDateRanges    : 365,
      dateCheckIn: '{{ $Booking->user_checkin }}',
      dateCheckOut: '{{ $Booking->user_checkout }}',
-
    });
  });
 </script>

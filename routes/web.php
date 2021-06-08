@@ -89,6 +89,7 @@ Route::group(['prefix' => 'admin'], function(){
 
     Route::get('/settings', [App\Http\Controllers\AdminPagesController::class, 'settingsview'])->name('admin.settings');
     Route::post('/settings/update', [App\Http\Controllers\AdminPagesController::class, 'settingsupdate'])->name('admin.settings.update');
+    Route::post('/settings/updateprices', [App\Http\Controllers\AdminPagesController::class, 'settingsupdateprices'])->name('admin.settings.update.prices');
 
     Route::get('/settings/price', [App\Http\Controllers\AdminPagesController::class, 'pricesettingsview'])->name('admin.settings.price');
 

@@ -220,7 +220,7 @@ class AdminPagesController extends Controller
     public function pricesettingsview(){
       if(Auth::user()->role != "admin")
         return redirect()->route('error.404');
-      $set_admin = SettingAdmin::orderBy('id')->first();
+      $set_admin = SettingAdmin::orderBy('id')->get();
       return view('adminpages.pricesetting')->with('set_admin', $set_admin);
     }
 
@@ -239,6 +239,25 @@ class AdminPagesController extends Controller
       $set_admin->save();
       return redirect()->route('admin.settings.email');
     }
+
+    public function settingsupdateprices(Request $request){
+      if(Auth::user()->role != "admin")
+        return redirect()->route('error.404');
+      $set_admin = SettingAdmin::find($request->id);
+      $set_admin->adult1_price = $request->week_adult1_price;
+      $set_admin->adult2_price = $request->week_adult2_price;
+      $set_admin->adult3_price = $request->week_adult3_price;
+      $set_admin->adult4_price = $request->week_adult4_price;
+      $set_admin->adult1_price_weekend = $request->weekend_adult1_price;
+      $set_admin->adult2_price_weekend = $request->weekend_adult2_price;
+      $set_admin->adult3_price_weekend = $request->weekend_adult3_price;
+      $set_admin->adult4_price_weekend = $request->weekend_adult4_price;
+
+      $set_admin->save();
+
+      return redirect()->route('admin.settings.price');
+    }
+
 
     public function settingsupdate(Request $request){
       if(Auth::user()->role != "admin")
@@ -352,13 +371,17 @@ class AdminPagesController extends Controller
     }
     public function editbookingdelaits($id){
       $Booking = Booking::where('id', $id)->first();
+      $days=$Booking->datediffcount($Booking->user_checkin,$Booking->user_checkout);
+      $Booking->user_days = $days;
       return view('adminpages.editbookingdelaits')->with('Booking', $Booking);
     }
     public function updatebookingdelaits(Request $request){
       $booking_id = $request->booking_id;
       $Booking = Booking::where('id', $booking_id)->first();
-      $Booking->user_fullname = $request->user_fullname;
-      $Booking->user_surname = $request->user_surname;
+      $user_name = trim($request->user_fullname);
+      $user_surname = (strpos($user_name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $user_name);
+      $Booking->user_fullname = $user_name;
+      $Booking->user_surname = $user_surname;
       $Booking->user_email = $request->user_email;
       $Booking->user_phone = $request->user_phone;
       if(isset($request->guest_surname1))
@@ -367,14 +390,15 @@ class AdminPagesController extends Controller
         $Booking->guest_surname1 = $request->guest_surname2;
       if(isset($request->guest_surname3))
         $Booking->guest_surname1 = $request->guest_surname3;
-
       $Booking->user_checkin = $request->t_start;
-      $Booking->user_checkout = $request->t_end;
+      $user_checkout = $request->booking_day_end-1;
+      $user_checkout = date('Y-m-d', strtotime("+".$user_checkout." day", strtotime($request->t_start)));
+      $Booking->user_checkout =  $user_checkout;
       if($Booking->check_availability()){
         $Booking->save();
         return redirect()->route('admin.booking.viewbookings');
       }else{
-        return redirect()->route('error.404');
+        return back()->withErrors(['Place is not available for this time. Please choose another dates!']);
       }
     }
 

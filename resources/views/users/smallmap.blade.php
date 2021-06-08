@@ -23,7 +23,7 @@
       </div>
       <div class="col-sm-8 offset-sm-1">
         <h2 id ="heading_qt">{{ __('Book your favorite place on the map') }}</h2>
-              <form action="" method="GET" id="datepickerform">
+              <form action="" method="HEAD" id="datepickerform">
                 {{ csrf_field() }}
                 <br>
                 <noscript>
