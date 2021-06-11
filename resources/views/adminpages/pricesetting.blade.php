@@ -123,25 +123,7 @@
                     @csrf
 
                     <input type="hidden" name="id" value="{{ $set_admin[1]->id }}">
-                    <div class="form-group row">
-                        <label for="discount"  class="col-md-8 col-form-label text-md-center" style="text-align:left; font-weight:bold;">{{ __('Activate Monthly Booking (Daily fee included) ') }}</label>
-                        <div class="col-md-2">
-                          <label class="switch">
-                            <input type="checkbox">
-                            {{-- <input type="checkbox" checked> --}}
-                            <span class="slider round"></span>
-                          </label>
 
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="adult1_price" class="col-md-4 col-form-label text-md-right">{{ __('Daily Fee') }}</label>
-                        <div class="col-md-6">
-                            <input type="number" step="0.01" class="form-control" name="daily_fee" value="{{ $set_admin[1]->daily_fee }}" disabled required>
-
-                        </div>
-                    </div>
                     <br>
                     <h5>Week</h5>
                     <hr>
@@ -233,25 +215,7 @@
                     @csrf
 
                     <input type="hidden" name="id" value="{{ $set_admin[2]->id }}">
-                    <div class="form-group row">
-                        <label for="discount"  class="col-md-8 col-form-label text-md-center" style="text-align:left; font-weight:bold;">{{ __('Activate Monthly Booking (Daily fee included) ') }}</label>
-                        <div class="col-md-2">
-                          <label class="switch">
-                            <input type="checkbox">
-                            {{-- <input type="checkbox" checked> --}}
-                            <span class="slider round"></span>
-                          </label>
 
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="adult1_price" class="col-md-4 col-form-label text-md-right">{{ __('Daily Fee') }}</label>
-                        <div class="col-md-6">
-                            <input type="number" step="0.01" class="form-control" name="daily_fee" value="{{ $set_admin[2]->daily_fee }}" disabled required>
-
-                        </div>
-                    </div>
                     <br>
                     <h5>Week</h5>
                     <hr>
@@ -343,25 +307,7 @@
                     @csrf
 
                     <input type="hidden" name="id" value="{{ $set_admin[3]->id }}">
-                    <div class="form-group row">
-                        <label for="discount"  class="col-md-8 col-form-label text-md-center" style="text-align:left; font-weight:bold;">{{ __('Activate Monthly Booking (Daily fee included) ') }}</label>
-                        <div class="col-md-2">
-                          <label class="switch">
-                            <input type="checkbox">
-                            {{-- <input type="checkbox" checked> --}}
-                            <span class="slider round"></span>
-                          </label>
 
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="adult1_price" class="col-md-4 col-form-label text-md-right">{{ __('Daily Fee') }}</label>
-                        <div class="col-md-6">
-                            <input type="number" step="0.01" class="form-control" name="daily_fee" value="{{ $set_admin[3]->daily_fee }}" disabled required>
-
-                        </div>
-                    </div>
                     <br>
                     <h5>Week</h5>
                     <hr>
@@ -439,7 +385,5 @@
     </div>
 </div>
 </div>
-
-<div style="padding-top: 150px;"></div>
 
 @endsection
