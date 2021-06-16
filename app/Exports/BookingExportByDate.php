@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Exports;
-
+    
 use App\Models\Booking;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -37,7 +37,7 @@ class BookingExportByDate implements FromCollection, WithHeadings
             Booking::raw('(created_at +  INTERVAL 2 HOUR) AS created_at'),
             'paid_ammount'
         )
-            ->where('user_checkin', $this->date)
+            ->whereRaw('"' . $this->date . '" between `user_checkin` and `user_checkout`')
             ->get();
     }
 
