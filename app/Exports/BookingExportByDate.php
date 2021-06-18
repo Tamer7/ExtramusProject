@@ -35,7 +35,7 @@ class BookingExportByDate implements FromCollection, WithHeadings
             'promo_codes.promo_type',
             'bookings.user_payment_type',
             'bookings.user_booking_tracking_id',
-            DB::raw('(bookings.created_at +  INTERVAL 2 HOUR) AS created_at'),
+            'bookings.created_at',
             'bookings.paid_ammount'
         )
             ->whereRaw('"' . $this->date . '" between `user_checkin` and `user_checkout`')

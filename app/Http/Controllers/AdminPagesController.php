@@ -387,9 +387,7 @@ class AdminPagesController extends Controller
 
   public function viewbookingdelaits($id)
   {
-    $Booking = DB::table('bookings')
-      ->where('id', $id)
-      ->leftJoin('promo_codes', 'bookings.user_promo', '=', 'promo_codes.promocode')
+    $Booking = Booking::where('id', $id)
       ->first();
     return view('adminpages.viewbookingdelaits')->with('Booking', $Booking);
   }

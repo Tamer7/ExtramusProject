@@ -31,7 +31,8 @@ class UsersExport implements FromCollection, WithHeadings
             'promo_codes.promo_type',
             'bookings.user_payment_type',
             'bookings.user_booking_tracking_id',
-            DB::raw('(bookings.created_at +  INTERVAL 2 HOUR) AS created_at'),
+            'bookings.created_at',
+            //DB::raw('(bookings.created_at +  INTERVAL 2 HOUR) AS created_at'),
             'bookings.paid_ammount'
         )->leftJoin('promo_codes', 'bookings.user_promo', '=', 'promo_codes.promocode')->get();
     }
