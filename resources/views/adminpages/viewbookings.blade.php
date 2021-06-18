@@ -19,7 +19,9 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Promo Type</th>
                         <th>{{ __('Adults') }}</th>
+                        <th>{{ __('Babies') }}</th>
                         <th>Check-In</th>
                         <th>Check-Out</th>
                         <th>Created At</th>
@@ -33,12 +35,14 @@
                   {{-- process bar --}}
                   @foreach ($Bookings as $Booking)
                     <tr>
-                        <td>{{ $Booking->id }}</td>
+                        <td>{{ $Booking->ID }}</td>
                         <td>{{ $Booking->place_id }}</td>
                         <td>{{ $Booking->user_fullname }}</td>
                         <td>{{ $Booking->user_email }}</td>
                         <td>{{ $Booking->user_phone }}</td>
+                        <td>{{ $Booking->promo_type }}</td>
                         <td>{{ $Booking->user_no_of_guest }}</td>
+                        <td>{{ $Booking->user_no_of_babies }}</td>
                         <td>{{ $Booking->user_checkin }}</td>
                         <td>{{ $Booking->user_checkout }}</td>
                         <td>
@@ -47,9 +51,9 @@
                           @endphp
                         </td>
                         <td>{{ $Booking->user_payment_type }}</td>
-                        <td><a href="{{ route('admin.booking.viewbookingdelaits', $Booking->id) }}">View</a>
+                        <td><a href="{{ route('admin.booking.viewbookingdelaits', $Booking->ID) }}">View</a>
                           @if (Auth::user()->role == "admin")
-                            / <a href="{{ route('admin.booking.editbookingdelaits', $Booking->id) }}">Edit</a>
+                            / <a href="{{ route('admin.booking.editbookingdelaits', $Booking->ID) }}">Edit</a>
                           @endif
                         </td>
                     </tr>
