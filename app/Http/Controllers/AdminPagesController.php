@@ -457,7 +457,23 @@ class AdminPagesController extends Controller
   public function booking_view_all()
   {
 
-    $Bookings = Booking::orderByDesc('id')->get();
+    $Bookings = DB::table('bookings')
+      ->select(
+        'bookings.id AS ID',
+        'bookings.place_id',
+        'bookings.user_fullname',
+        'bookings.user_email',
+        'bookings.user_phone',
+        'promo_codes.promo_type',
+        'bookings.user_no_of_guest',
+        'bookings.user_no_of_babies',
+        'bookings.user_checkin',
+        'bookings.user_checkout',
+        'bookings.user_payment_type',
+        'bookings.created_at'
+      )
+      ->leftJoin('promo_codes', 'bookings.user_promo', '=', 'promo_codes.promocode')
+      ->get();
     return view('adminpages.viewallbookings')->with('Bookings', $Bookings);
   }
   public function deletebookingdelaits($id)

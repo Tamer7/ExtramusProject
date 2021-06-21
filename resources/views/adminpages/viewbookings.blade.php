@@ -11,7 +11,7 @@
             <button style="float:right;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportExcelmodal"> {{ __('Export to Excel') }} </button><br><br><br>
             @include('layouts.modalLayout.exportToexcel')
           @endif
-            <table id="example_booking" class="table table-striped table-bordered">
+            <table id="example_booking1" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>Book ID</th>
@@ -19,13 +19,13 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Promo Type</th>
                         <th>{{ __('Adults') }}</th>
                         <th>{{ __('Babies') }}</th>
                         <th>Check-In</th>
                         <th>Check-Out</th>
                         <th>Created At</th>
                         <th>Payment</th>
+                        <th>Promo Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,7 +40,6 @@
                         <td>{{ $Booking->user_fullname }}</td>
                         <td>{{ $Booking->user_email }}</td>
                         <td>{{ $Booking->user_phone }}</td>
-                        <td>{{ $Booking->promo_type }}</td>
                         <td>{{ $Booking->user_no_of_guest }}</td>
                         <td>{{ $Booking->user_no_of_babies }}</td>
                         <td>{{ $Booking->user_checkin }}</td>
@@ -51,6 +50,7 @@
                           @endphp
                         </td>
                         <td>{{ $Booking->user_payment_type }}</td>
+                        <td>{{ $Booking->promo_type }}</td>
                         <td><a href="{{ route('admin.booking.viewbookingdelaits', $Booking->ID) }}">View</a>
                           @if (Auth::user()->role == "admin")
                             / <a href="{{ route('admin.booking.editbookingdelaits', $Booking->ID) }}">Edit</a>
@@ -78,4 +78,29 @@
         </div>
     </div>
   </div>
+  <script>
+    // data tables
+$(document).ready(function() {
+$('#example_booking1').DataTable({
+"order": [[ 0, "desc" ]],
+dom: 'lBfrtip',
+buttons: [
+'copy', 
+'csv', 
+'excel', 
+'print',
+{
+extend : 'pdfHtml5',
+title : function() {
+  return "Spiaggia Booking List";
+},
+orientation : 'landscape',
+pageSize : 'A4',
+titleAttr : 'PDF'
+} 
+]
+});
+} );
+
+</script>
 @endsection
