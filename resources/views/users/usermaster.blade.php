@@ -23,6 +23,15 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('css/datepicker/t-datepicker.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('css/datepicker/t-datepicker-green.css') }}">
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9KZZPN289Z"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-9KZZPN289Z');
+</script>
+
 
 
 </head>
