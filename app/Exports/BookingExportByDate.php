@@ -41,6 +41,7 @@ class BookingExportByDate implements FromCollection, WithHeadings
             ->whereRaw('"' . $this->date . '" between `user_checkin` and `user_checkout`')
             //->whereRaw('? between user_checkin and user_checkout', $this->date)   This also works
             ->leftJoin('promo_codes', 'bookings.user_promo', '=', 'promo_codes.promocode')->get();
+
     }
 
     public function headings(): array

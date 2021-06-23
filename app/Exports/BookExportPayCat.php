@@ -18,6 +18,7 @@ class BookExportPayCat implements FromCollection, WithHeadings
     $this->category = $category;
   }
 
+
   public function collection()
   {
     return DB::table('bookings')->select(

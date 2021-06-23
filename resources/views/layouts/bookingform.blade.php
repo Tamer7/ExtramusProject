@@ -75,8 +75,8 @@
     <label for="Stripe" class="booking_payment_type_style">{{ __('Stripe') }}</label> --}}
     <input type="radio" name="payment_type" value="Credit Card" checked>
     <label for="Card" class="booking_payment_type_style">{{ __('Credit Card') }}</label>
-    <input type="radio" name="payment_type" value="Agreements">
-    <label for="Subscribe" class="booking_payment_type_style">{{ __('Agreements') }}</label>
+    {{-- <input type="radio" name="payment_type" value="Agreements">
+    <label for="Subscribe" class="booking_payment_type_style">{{ __('Agreements') }}</label> --}}
     @auth
       <input type="radio" name="payment_type" value="Entrance">
       <label for="Entrance" class="booking_payment_type_style">{{ __('Entrance') }}</label>
