@@ -11,7 +11,7 @@
             <button style="float:right;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportExcelmodal"> {{ __('Export to Excel') }} </button><br><br><br>
             @include('layouts.modalLayout.exportToexcel')
           @endif
-            <table id="example_booking1" class="table table-striped table-bordered">
+            <table id="example_booking1" class="table table-striped table-bordered" style="font-size:12px">
                 <thead>
                     <tr>
                       <th>Book ID</th>
@@ -69,9 +69,9 @@ $('#example_booking1').DataTable({
 "order": [[ 0, "desc" ]],
 dom: 'lBfrtip',
 buttons: [
-'copy', 
-'csv', 
-'excel', 
+'copy',
+'csv',
+'excel',
 'print',
 {
 extend : 'pdfHtml5',
@@ -81,7 +81,7 @@ title : function() {
 orientation : 'landscape',
 pageSize : 'A4',
 titleAttr : 'PDF'
-} 
+}
 ]
 });
 } );

@@ -57,7 +57,7 @@
    <div class="t-datepicker" style="display:none;" id="booking_day_start"><span style="display:none;" class="t-check-in" name="booking_day_start"></span><span style="display:none;" name="booking_day_end" class="t-check-out"></span></div>
    {{-- <input id="booking_day_start" placeholder="DD-MM-YY" name="booking_day_start" class="form-control booking_inp_textbox_style"> --}}
  {{-- </div><br><br> --}}
-  {{-- <div class="form-group">
+  <div class="form-group">
    <label >{{ __('Promo Code') }}</label>
    @if ($maparray['error_msg']==1)
      <input id="promoCode" type="text" name="promocode" class="form-control booking_inp_textbox_style" autofocus>
@@ -66,7 +66,7 @@
      <input id="promoCode" type="text" name="promocode" class="form-control booking_inp_textbox_style">
    @endif
 
-  </div> --}}
+  </div>
   <div class="form-group">
     <label >{{ __('Payment Type') }}: </label><br>
     {{-- <input type="radio" name="payment_type" value="Paypal" checked>
