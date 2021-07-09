@@ -12,25 +12,33 @@ use App\Models\TempbookingCard;
 class Booking extends Model
 {
   use HasFactory;
-  public function check_availability()
-  {
-    // check the place id matching first
-    $temp_book = new TempBooking;
-    if ($temp_book->isBusy($this->place_id, $this->checkin)) return false;
-    $status = 0;
-    $booking = new Booking;
-    $book_id = $this->id;
-    if ($book_id == null) {
-      $status = $booking->place_is_available($this->place_id, $this->user_checkin, $this->user_checkout);
-      $status = $booking->place_is_available_subs($this->place_id, $this->user_checkin, $this->user_checkout, $status);
-    } else {
-      $status = $booking->edit_place_is_available($book_id, $this->place_id, $this->user_checkin, $this->user_checkout);
-      $status = $booking->edit_place_is_available_subs($book_id, $this->place_id, $this->user_checkin, $this->user_checkout, $status);
+  public function check_availability(){
+      // check the place id matching first
+      $temp_book = new TempBooking;
+      if($temp_book->isBusy($this->place_id, $this->checkin)) return false;
+      $status = 0;
+      $booking = new Booking;
+      $book_id=$this->id;
+      if($book_id == null){
+        $status = $booking->place_is_available($this->place_id, $this->user_checkin, $this->user_checkout);
+        $status = $booking->place_is_available_subs($this->place_id, $this->user_checkin, $this->user_checkout, $status);
+      }else{
+        $compareBooking = Booking::where('id', $book_id)->get();
+        foreach ($compareBooking as $booking) {
+        if($booking->place_id == $this->place_id){
+          $status = $booking->edit_place_is_available($book_id,$this->place_id, $this->user_checkin, $this->user_checkout);
+          $status = $booking->edit_place_is_available_subs($book_id,$this->place_id, $this->user_checkin, $this->user_checkout, $status);
+        }else{
+          $status = $booking->place_is_available($this->place_id, $this->user_checkin, $this->user_checkout);
+          $status = $booking->place_is_available_subs($this->place_id, $this->user_checkin, $this->user_checkout, $status);
+        }
+      }
+      }
+      // to avoid gray and green
+      if($status==0) return true;
+      else return false;
+
     }
-    // to avoid gray and green
-    if ($status == 0) return true;
-    else return false;
-  }
 
 
 

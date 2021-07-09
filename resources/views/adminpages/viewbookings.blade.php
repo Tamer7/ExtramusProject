@@ -11,7 +11,7 @@
             <button style="float:right;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportExcelmodal"> {{ __('Export to Excel') }} </button><br><br><br>
             @include('layouts.modalLayout.exportToexcel')
           @endif
-            <table id="example_booking1" class="table table-striped table-bordered" style="font-size:12px">
+            <table id="example_booking1" class="table table-striped table-bordered" style="font-size:10px">
                 <thead>
                     <tr>
                         <th>Book ID</th>

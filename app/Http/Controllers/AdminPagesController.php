@@ -398,32 +398,63 @@ class AdminPagesController extends Controller
     $Booking->user_days = $days;
     return view('adminpages.editbookingdelaits')->with('Booking', $Booking);
   }
-  public function updatebookingdelaits(Request $request)
-  {
+  public function updatebookingdelaits(Request $request){
     $booking_id = $request->booking_id;
-    $Booking = Booking::where('id', $booking_id)->first();
-    $user_name = trim($request->user_fullname);
-    $user_surname = (strpos($user_name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $user_name);
-    $Booking->user_fullname = $user_name;
-    $Booking->user_surname = $user_surname;
-    $Booking->user_email = $request->user_email;
-    $Booking->user_phone = $request->user_phone;
-    if (isset($request->guest_surname1))
-      $Booking->guest_surname1 = $request->guest_surname1;
-    if (isset($request->guest_surname2))
-      $Booking->guest_surname1 = $request->guest_surname2;
-    if (isset($request->guest_surname3))
-      $Booking->guest_surname1 = $request->guest_surname3;
-    $Booking->user_checkin = $request->t_start;
-    $user_checkout = $request->booking_day_end - 1;
-    $user_checkout = date('Y-m-d', strtotime("+" . $user_checkout . " day", strtotime($request->t_start)));
-    $Booking->user_checkout =  $user_checkout;
-    if ($Booking->check_availability()) {
-      $Booking->save();
-      return redirect()->route('admin.booking.viewbookings');
-    } else {
-      return back()->withErrors(['Place is not available for this time. Please choose another dates!']);
-    }
+      $Booking = Booking::where('id', $booking_id)->first();
+      $user_name = trim($request->user_fullname);
+      $Booking->place_id= $request->place_id;
+      $Booking->user_fullname = $user_name;
+      $Booking->user_email = $request->user_email;
+      $Booking->user_phone = $request->user_phone;
+      $Booking->user_no_of_guest = $request->numberofguest + 1;
+      $Booking->user_no_of_babies = $request->numberofbabies;
+      if(isset($request->guestnames1))
+        $Booking->guest_surname1 = $request->guestnames1;
+      else{
+        $Booking->guest_surname1=NULL;
+      }
+      if(isset($request->guestnames2))
+        $Booking->guest_surname2 = $request->guestnames2;
+      else{
+          $Booking->guest_surname2=NULL;
+      }
+      if(isset($request->guestnames3))
+        $Booking->guest_surname3 = $request->guestnames3;
+      else{
+          $Booking->guest_surname3=NULL;
+      }
+      if(isset($request->guestnamesbabies1))
+        $Booking->baby_surname1 = $request->guestnamesbabies1;
+      else{
+        $Booking->baby_surname1=NULL;
+      }
+      if(isset($request->guestnamesbabies2))
+        $Booking->baby_surname2 = $request->guestnamesbabies2;
+      else{
+          $Booking->baby_surname2=NULL;
+      }
+      if(isset($request->guestnamesbabies3))
+        $Booking->baby_surname3 = $request->guestnamesbabies3;
+      else{
+          $Booking->baby_surname3=NULL;
+      }
+      if(isset($request->guestnamesbabies4))
+        $Booking->baby_surname4 = $request->guestnamesbabies4;
+      else{
+          $Booking->baby_surname4=NULL;
+      }
+      $Booking->user_checkin = $request->t_start;
+      $user_checkout = $request->booking_day_end-1;
+      $user_checkout = date('Y-m-d', strtotime("+".$user_checkout." day", strtotime($request->t_start)));
+      $Booking->user_checkout =  $user_checkout;
+      if($Booking->check_availability()){
+        // $settingAdmin = new SettingAdmin();
+        // $Booking->paid_ammount = $settingAdmin->calculatePriceNew($Booking->place_id,$Booking->user_checkin,$user_checkout,$Booking->user_no_of_guest);
+        $Booking->save();
+        return redirect()->route('admin.booking.viewbookings');
+      }else{
+        return back()->withErrors(['Place is not available for this time. Please choose another dates!']);
+      }
   }
 
   public function booking_view()
