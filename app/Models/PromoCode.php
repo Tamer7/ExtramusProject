@@ -14,10 +14,14 @@ class PromoCode extends Model
       return $place_price * $flag;
     }
 
-    public function checkingValidity($promoCode, $map_name){
+    public function checkingValidity($promoCode, $map_name, $date){
+
+      $date = $date+1;
+
         $promo_match_for_all = PromoCode::where('promocode', $promoCode)
                                           ->where('map_name', "For All")
                                           ->where('status', 1)
+                                          ->where('numberofuse', '>=', $date)
                                           ->count();
         if($promo_match_for_all){
           $promo_match_for_all = PromoCode::where('promocode', $promoCode)
@@ -30,6 +34,7 @@ class PromoCode extends Model
         $promo_match_for_map = PromoCode::where('promocode', $promoCode)
                                           ->where('map_name', $map_name)
                                           ->where('status', 1)
+                                          ->where('numberofuse', '>=', $date)
                                           ->count();
         if($promo_match_for_map){
           $promo_match_for_map = PromoCode::where('promocode', $promoCode)
@@ -43,7 +48,8 @@ class PromoCode extends Model
         return false;
     }
 
-    public function usedPromoOnce($promoCode){
+    public function usedPromoOnce($promoCode, $date){
+        $date += 1;
         $promomat = PromoCode::where('promocode', $promoCode)
                                 ->where('status', 1)
                                 ->first();
@@ -54,7 +60,9 @@ class PromoCode extends Model
           $promomat->status=0;
           return false;
         }else{
-          $promomat->numberofuse = $promomat->numberofuse - 1;
+          if($promomat->numberofuse < $date) return false;
+
+          $promomat->numberofuse = $promomat->numberofuse - $date;
           if($promomat->numberofuse == 0)
             $promomat->status=0;
         }

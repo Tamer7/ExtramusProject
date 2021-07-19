@@ -16,7 +16,7 @@ use App\Models\PromoCode;
 use App\Models\Trans;
 use App\Models\TempbookingCard;
 
-
+use DateTime;
 use Auth;
 
 class AdminPagesController extends Controller
@@ -110,6 +110,12 @@ class AdminPagesController extends Controller
           $booking->paid_ammount = 0;
           $booking->is_approved = 1;
         } else {
+
+          $datetime1 = new DateTime($booking->user_checkin);
+          $datetime2 = new DateTime($booking->user_checkout);
+          $interval = $datetime1->diff($datetime2);
+          $numberofdays = $interval->format('%a');
+
           $booking->is_approved = 1;
           $booking->user_payment_type = 'Entrance';
           $promo = $request->promocode;
@@ -118,7 +124,7 @@ class AdminPagesController extends Controller
           $price_temp = $set_admin->calculatePrice($place, $booking->user_checkin, $booking->user_checkout, $booking->user_no_of_guest);
           $booking->paid_ammount = $price_temp;
           $place->price = $price_temp;
-          if ($promoCode->checkingValidity($promo, $place->map_name)) {
+          if ($promoCode->checkingValidity($promo, $place->map_name, $numberofdays)) {
             $booking->user_promo = $promo;
             $discount = $promoCode->discountCalculate($booking->user_promo, $place->price);
             $place->price = $place->price - $discount;
@@ -350,6 +356,10 @@ class AdminPagesController extends Controller
     else
       $promo->status = 0;
     $promo->save();
+    // redial if disabled
+    if($promo->numberofuse <= 0){
+        return redirect()->route('admin.promocodes.edit', $id);
+    }
     return redirect()->route('admin.promocodes');
   }
   public function promocodesviewcreate()
