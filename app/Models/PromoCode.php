@@ -21,27 +21,25 @@ class PromoCode extends Model
         $promo_match_for_all = PromoCode::where('promocode', $promoCode)
                                           ->where('map_name', "For All")
                                           ->where('status', 1)
-                                          ->where('numberofuse', '>=', $date)
                                           ->count();
         if($promo_match_for_all){
           $promo_match_for_all = PromoCode::where('promocode', $promoCode)
                                             ->where('map_name', "For All")
                                             ->where('status', 1)
                                             ->first();
-          if($promo_match_for_all->numberofuse>0)
+          if($promo_match_for_all->numberofuse >= $date || $promo_match_for_all->numberofuse == -1)
             return true;
         }
         $promo_match_for_map = PromoCode::where('promocode', $promoCode)
                                           ->where('map_name', $map_name)
                                           ->where('status', 1)
-                                          ->where('numberofuse', '>=', $date)
                                           ->count();
         if($promo_match_for_map){
           $promo_match_for_map = PromoCode::where('promocode', $promoCode)
                                             ->where('map_name', $map_name)
                                             ->where('status', 1)
                                             ->first();
-          if($promo_match_for_map->numberofuse>0)
+          if($promo_match_for_map->numberofuse >= $date || $promo_match_for_all->numberofuse == -1)
             return true;
         }
 
