@@ -84,6 +84,22 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="numberofadults" class="col-md-4 col-form-label text-md-right">Number of Adults</label>
+                            <div class="col-md-6">
+                                <input id="numberofadults" type="number" class="form-control" name="numberofadults" value="{{ $promo->numberofadults }}" min="1" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="numberofbabies" class="col-md-4 col-form-label text-md-right">Number of Babies</label>
+                            <div class="col-md-6">
+                                <input id="numberofbabies" type="number" class="form-control" name="numberofbabies" value="{{ $promo->numberofbabies }}" min="0" required>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
                             <label for="discount" class="col-md-4 col-form-label text-md-right">{{ __('Number of Use') }}</label>
                             <div class="col-md-6">
                               @if ($promo->numberofuse == "-1")

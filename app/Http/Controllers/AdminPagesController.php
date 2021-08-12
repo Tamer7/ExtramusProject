@@ -175,20 +175,90 @@ class AdminPagesController extends Controller
   }
 
 
-  public function place_view()
-  {
+  public function submitplace_search(Request $request){
+      $startDate = date('Y-m-d');
+      $endDate = date('Y-m-d');
+      $startDate = $request->startDate;
+      $newSDate = date("d-m-Y",  strtotime($startDate));
+      $request->session()->put('startingRange', $newSDate);
+
+      $endDate = $request->endDate;
+      $newEDate = date("d-m-Y",  strtotime($endDate));
+      $request->session()->put('endingRange', $newEDate);
+
+      $places = Place::orderBy('place_id')->get();
+      $booking = new Booking;
+      //$Todaydate = date('Y-m-d');
+      foreach ($places as $place) {
+        if ($place->status == -1) {
+          continue;
+        }
+        $place->status = $booking->place_is_available($place->place_id, $startDate, $endDate);
+        -$place->status = $booking->place_is_available($place->place_id, $startDate, $endDate);
+        $place->status = $booking->place_is_available_subs($place->place_id, $startDate, $endDate, $place->status);
+      }
+
+      return view('adminpages.viewplaces')->with('places', $places)->with('startDate', $startDate)->with('endDate', $endDate);
+  }
+
+  public function place_view(Request $request){
+
+    $startDate = date('Y-m-d');
+    $endDate = date('Y-m-d');
+    if (isset($request->startDate) && isset($request->$endDate)) {
+      $startDate = $request->startDate;
+      $endDate = $request->endDate;
+    }
+    // $request->session()->put('endingRange', $endDate);
+
     $places = Place::orderBy('place_id')->get();
-    // $booking = new Booking;
-    $Todaydate = date('Y-m-d');
+    $booking = new Booking;
+    // $Todaydate = date('Y-m-d');
     foreach ($places as $place) {
       if ($place->status == -1) {
         continue;
       }
       // $place->status =$booking->place_is_available($place->place_id, $Todaydate, $Todaydate);
       // $place->status =$booking->place_is_available_subs($place->place_id, $Todaydate, $Todaydate, $place->status);
+      $place->status = $booking->place_is_available($place->place_id, $startDate, $endDate);
+      $place->status = $booking->place_is_available_subs($place->place_id, $startDate, $endDate, $place->status);
     }
 
-    return view('adminpages.viewplaces')->with('places', $places);
+    return view('adminpages.viewplaces')->with('places', $places)->with('startDate', $startDate)->with('endDate', $endDate);
+  }
+
+  public function quickbooking(Request $request)
+  {
+    $formattedStartDate = $request->qStartDate;
+    $formattedEndDate = $request->qEndDate;
+    $originalFormatStartDate = date("Y-m-d", strtotime($formattedStartDate));
+    $originalFormatEndDate = date("Y-m-d", strtotime($formattedEndDate));
+
+    // Saving the data
+    $booking = new Booking();
+    $booking->place_id = $request->qID;
+    $booking->user_fullname = $request->qFullName;
+    $booking->user_checkin = $originalFormatStartDate;
+    $booking->user_checkout = $originalFormatEndDate;
+    $booking->user_no_of_guest = $request->qNumberOfGuests;
+    $booking->user_no_of_babies = $request->qNumberOfBabies;
+    $booking->creator_name = $request->qCreatorName;
+
+    //Filling Null for quick booking options
+    $booking->payer_name = $request->qCreatorName;
+    $booking->user_surname = $request->qFullName;
+    $booking->user_email = "Admin";
+    $booking->user_phone = "0";
+    $booking->is_approved = 1;
+    $booking->user_payment_type = "Admin";
+    $booking->user_booking_tracking_id = "0";
+
+
+
+
+    $booking->save();
+
+    return redirect()->route('admin.place.viewplaces');
   }
 
 
@@ -341,6 +411,9 @@ class AdminPagesController extends Controller
       $promo->numberofuse = $request->numberofuse;
     else
       $promo->numberofuse = -1;
+
+    $promo->numberofadults = $request->numberofadults;
+    $promo->numberofbabies = $request->numberofbabies;
     $promo->discount = $request->discount;
     $promo->save();
     return redirect()->route('admin.promocodes');
@@ -367,26 +440,31 @@ class AdminPagesController extends Controller
     $map_coods = Bigmapmapping::orderBy('id')->get();
     return view('adminpages.createpromo')->with('maps', $map_coods);
   }
-  public function promocodesviewstore(Request $request)
-  {
-    $promoCode = new PromoCode;
+
+  public function promocodeadd(Request $request){
+
+    $promoCode = new PromoCode();
     $promoCode->map_name = $request->map_name;
     $promoCode->promocode = $request->promocode;
     $promoCode->promo_user = $request->promo_user;
     $promoCode->promo_type = $request->promo_type;
+    $promoCode->numberofadults = $request->numberofadults;
+    $promoCode->numberofbabies = $request->numberofbabies;
     if (isset($request->numberofuse))
       $promoCode->numberofuse = $request->numberofuse;
     else
       $promoCode->numberofuse = -1;
+
     $promoCode->discount = $request->discount;
     try {
-      $promoCode->save();
-      return redirect()->route('admin.promocodes');
-    } catch (\Illuminate\Database\QueryException $e) {
-      $errors = new MessageBag();
-      $errors->add('promocode', 'Promocode already exists.');
-      return redirect()->route('admin.promocodes.create')->withErrors($errors);
-    }
+        $promoCode->save();
+        return redirect()->route('admin.promocodes');
+      } catch (\Illuminate\Database\QueryException $e) {
+        $errors = new MessageBag();
+        $errors->add('promocode', 'Promocode already exists.');
+        return redirect()->route('admin.promocodes.create')->withErrors($errors);
+      }
+
   }
 
   public function entrance_view()
