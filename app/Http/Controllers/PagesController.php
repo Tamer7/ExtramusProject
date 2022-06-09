@@ -13,6 +13,7 @@ use App\Models\PromoCode;
 use App\Models\TempbookingCard;
 use App\Mail\SendMail;
 
+use DateTime;
 use Auth;
 
 class PagesController extends Controller
@@ -20,7 +21,7 @@ class PagesController extends Controller
     //
 
     public function error404(){
-        return view('error404');
+        return view('users.homepage');
     }
 
     public function regulationsview(){
@@ -63,20 +64,46 @@ class PagesController extends Controller
     public function viewsmallplace(Request $req){
       $map_name="Sectors";
       $set_admin = SettingAdmin::orderBy('id')->first();
+	  
+      $now_date = new DateTime();
+	  $due_date = new DateTime($set_admin->booking_start);
+
+   
+		if ($now_date < $due_date) 
+      		return view('users.smallmap_copy')->with('start',$set_admin);
+		
+			
+		
+		
+		
+		
       $map_coods = Bigmapmapping::orderBy('id')->get();
       $checkin_date = $req->t_start;
       $checkout_date = $req->t_end;
 
+      function datediffcount($checkin, $checkout){
+        $checkin = strtotime($checkin);
+        $checkout = strtotime($checkout);
+        $datediff = $checkout-$checkin;
+          if(round($datediff / (60 * 60 * 24))<0){
+            return 0;
+          }
+        return round($datediff / (60 * 60 * 24))+1;
+    }
+
+    $no_of_days = datediffcount($checkin_date, $checkout_date);
+
+
       if($checkin_date=="null")
         return redirect()->route('user.viewsmallplace', $map_name);
-      $nmofdays = ($req->no_of_day)-1;
+      $nmofdays = ($no_of_days)-1;
       // $nmofdays = ceil(abs(strtotime($checkout_date) - strtotime($checkin_date)) / 86400)+1;
 
-      if(number_format($req->no_of_day)<=0)
+      if(number_format($no_of_days)<=0)
         $nmofdays = 0;
       $checkout_date = $checkin_date;
 
-      if(isset($req->no_of_day)){
+      if(isset($no_of_days)){
         $date = $checkin_date;
         $date = strtotime($date);
         $date = strtotime("+".$nmofdays." day", $date);
@@ -91,7 +118,7 @@ class PagesController extends Controller
       if(isset($req->t_start)){
         $booking = new Booking;
         foreach ($all_places as $place) {
-          if($place->status == -1){
+          if($place->status == -1 || $place->status == 1 || $place->status == 3){
             array_push($places, $place);
             continue;
           }
@@ -109,18 +136,79 @@ class PagesController extends Controller
       }else{
         $places = $all_places;
       }
+		
+      $set_admin = SettingAdmin::orderBy('id')->first();
+		$booking = new Booking;
+		
+	      $max_reservation = $booking->max_reservation();
+
+
+      if($max_reservation >  $set_admin->max_reservation){
+        $err_msg2 = "Max Amount of Reservation Reached";
+        $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
+        return view('users.smallmap')->with('maparray', $maparray);
+      }
+
+
+        
+        
+      if($set_admin->day == "1"){
+
+        if ($no_of_days < 1) {
+          $err_msg2 = "min day limit";
+      $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
+      return view('users.smallmap')->with('maparray', $maparray);
+}
+
+      }
+
+      if($set_admin->day == "2"){
+
+        if ($no_of_days < 1) {
+          $err_msg2 = "min day limit";
+      $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
+      return view('users.smallmap')->with('maparray', $maparray);
+}
+
+      }
+
+
+
+      if($set_admin->day == "3"){
+
+        if ($no_of_days < 1) {
+          $err_msg2 = "min day limit";
+      $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
+      return view('users.smallmap')->with('maparray', $maparray);
+
+        }
+      }
+		
+		
+		      if($set_admin->day == "4"){
+
+        if ($no_of_days < 1) {
+          $err_msg2 = "min day limit";
+      $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg2' => $err_msg2);
+      return view('users.smallmap')->with('maparray', $maparray);
+
+        }
+      }
+	
+		
       if(Auth::user()){
-        if(number_format($req->no_of_day)>365 && Auth::user()->role != "admin"){
+        if(number_format($no_of_days)>365 && Auth::user()->role != "admin"){
           $err_msg= "error";
           // return redirect()->route('user.viewsmallplace', $map_name)->with('err_msg', $err_msg);
           $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg' => $err_msg);
           return view('users.smallmap')->with('maparray', $maparray);
         }
-      }else if(number_format($req->no_of_day)>$set_admin->max_no_days){
+      }else if(number_format($no_of_days)<1){
         $err_msg= "error";
         // return redirect()->route('user.viewsmallplace', $map_name)->with('err_msg', $err_msg);
         $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'set_admin'=> $set_admin, 'err_msg' => $err_msg);
         return view('users.smallmap')->with('maparray', $maparray);
+
 
       }
       if(isset($req->t_start) && $nmofdays<$set_admin->min_no_days-1){
@@ -134,7 +222,10 @@ class PagesController extends Controller
       }
 
       $maparray = array('map_name' => $map_name, 'map_coods' => $map_coods, 'places'=> $places, 'checkin_date' => $checkin_date, 'checkout_date' => $checkout_date, 'set_admin'=> $set_admin);
+
+
       return view('users.smallmap')->with('maparray', $maparray);
+		
     }
 
     public function createbooking($place_id, $checkin, $checkout, $error_msg){
@@ -146,11 +237,11 @@ class PagesController extends Controller
         //make valid URL
         $set_admin = new SettingAdmin;
         if(!$set_admin->bookingURLvalidation($checkin, $checkout)){
-          return redirect()->route('error.404');
+          return redirect()->route('users.homepage');
         }
 
         if(!$booking->check_availability()){
-          return redirect()->route('error.404');
+          return redirect()->route('users.homepage');
         }
 
         //Engaged the place for 15 min
@@ -196,13 +287,17 @@ class PagesController extends Controller
       $booking->user_checkin = $request->t_start;
       $booking->user_checkout = $request->checkout_temp;
       // $booking->user_promo = $request->promocode;
+      $datetime1 = new DateTime($booking->user_checkin);
+      $datetime2 = new DateTime($booking->user_checkout);
+      $interval = $datetime1->diff($datetime2);
+      $numberofdays = $interval->format('%a');
 
       $booking->user_payment_type = $request->payment_type;
       if($booking->user_payment_type == "Credit Card"){
-        $booking->user_booking_tracking_id = uniqid('negombo_', true);
+        $booking->user_booking_tracking_id = uniqid('Spiaggia_San_Montano_', true);
         $booking->user_booking_tracking_id = str_replace('.', '_', $booking->user_booking_tracking_id);
       }else if($booking->user_payment_type == "Paypal"){
-        $booking->user_booking_tracking_id = uniqid('negombo_', true);
+        $booking->user_booking_tracking_id = uniqid('Spiaggia_San_Montano_', true);
         $booking->user_booking_tracking_id = str_replace('.', '_', $booking->user_booking_tracking_id);
       }
       // promo code handaling
@@ -215,7 +310,7 @@ class PagesController extends Controller
       $price_temp = $set_admin->calculatePrice($place, $booking->user_checkin, $booking->user_checkout, $booking->user_no_of_guest);
       $place->price =  $price_temp;
 
-      if($promoCode->checkingValidity($promo, $place->map_name)){
+      if($promoCode->checkingValidity($promo, $place->map_name, $numberofdays)){
         $booking->user_promo = $promo;
 
 
@@ -242,7 +337,7 @@ class PagesController extends Controller
         }
         return view('users.paymentbooking')->with('maparray', $maparray);
       }else{
-        return redirect()->route('error.404');
+        return redirect()->route('users.homepage');
       }
     }
 
@@ -251,7 +346,7 @@ class PagesController extends Controller
         $booking = Booking::where('user_booking_tracking_id', $tracking_id)->first();
 
         if(!isset($booking)){
-          return redirect()->route('error.404');
+          return redirect()->route('users.homepage');
         }
         $place = Place::where('place_id',$booking->place_id)->first();
         $map_coods = Bigmapmapping::orderBy('id')->get();
@@ -291,7 +386,14 @@ class PagesController extends Controller
       $booking->user_checkin = $request->user_checkin;
       $booking->user_checkout = $request->user_checkout;
       $booking->user_payment_type = $request->user_payment_type;
-      $booking->user_booking_tracking_id = uniqid('negombo_', true);
+      $booking->user_booking_tracking_id = uniqid('Spiaggia_San_Montano_', true);
+
+      //getting number of days
+
+      $datetime1 = new DateTime($booking->user_checkin);
+      $datetime2 = new DateTime($booking->user_checkout);
+      $interval = $datetime1->diff($datetime2);
+      $numberofdays = $interval->format('%a');
 
       $place = Place::where('place_id',$booking->place_id)->first();
 
@@ -316,7 +418,7 @@ class PagesController extends Controller
       $promoCode = new PromoCode;
       $discount = 0;
 
-      if($promoCode->checkingValidity($promo, $place->map_name) && $promoCode->usedPromoOnce($promo)){
+      if($promoCode->checkingValidity($promo, $place->map_name, $numberofdays) && $promoCode->usedPromoOnce($promo, $numberofdays)){
         $booking->user_promo = $promo;
         $discount = $promoCode->discountCalculate($booking->user_promo, $place->price);
         $place->price = $place->price - $discount;
@@ -353,7 +455,7 @@ class PagesController extends Controller
 
         return view('users.confirmbooking')->with('maparray', $maparray);
       }else{
-        return redirect()->route('error.404');
+        return redirect()->route('users.homepage');
       }
     }
 

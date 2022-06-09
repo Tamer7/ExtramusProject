@@ -18,9 +18,9 @@
           $all_content = str_replace("[no_of_adults]", $maparray['booking']->user_no_of_guest, $all_content);
           $all_content = str_replace("[no_of_babies]", $maparray['booking']->user_no_of_babies, $all_content);
           $all_content = str_replace("[payment_type]", $maparray['booking']->user_payment_type, $all_content);
-          $all_content = str_replace("[paid_amount]", 300, $all_content);
-          $all_content = str_replace("[total_amount]", $maparray['booking']->paid_ammount, $all_content);
-          $all_content = str_replace("[remaining_amount]", $maparray['booking']->paid_ammount-300, $all_content);
+          $all_content = str_replace("[paid_amount]",  500, $all_content);
+          //$all_content = str_replace("[total_amount]", $maparray['booking']->paid_ammount, $all_content);
+         $all_content = str_replace("[remaining_amount]", $maparray['booking']->paid_ammount-500, $all_content);
 
 
           $all_content = str_replace("[place_id]", $maparray['place']->place_id, $all_content);

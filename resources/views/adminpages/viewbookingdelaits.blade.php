@@ -38,9 +38,9 @@
               @isset($Booking->paid_ammount)
                 <label><strong>Total Amount: </strong></label><label> &nbsp; {{ $Booking->paid_ammount }} €</label><br>
 
-                @if ($Booking->user_payment_type!="Admin" && strtotime($Booking->created_at) < strtotime('2021-05-14'))
-                  <label><strong>Paid Ammount: </strong></label><label> &nbsp; 300 €</label><br>
-                  <label><strong>Remaining Ammount: </strong></label><label> &nbsp; {{ $Booking->paid_ammount-300 }} €</label><br>
+                @if ($Booking->user_payment_type!="Admin" && strtotime($Booking->created_at) < strtotime('2022-09-30'))
+                  <label><strong>Paid Ammount: </strong></label><label> &nbsp; 1000 €</label><br>
+                  <label><strong>Remaining Ammount: </strong></label><label> &nbsp; {{ $Booking->paid_ammount-1000 }} €</label><br>
                 @endif
               @endisset
               <label><strong>{{ __('Booked By ') }}: </strong></label><label> &nbsp; {{ $Booking->creator_name }}</label><br>

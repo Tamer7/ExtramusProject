@@ -36,3 +36,33 @@ function addFields2(numoffld){
       $(wrapper).append('<div class="form-group dyinpfld2"> <label for="surename">Nominativo Bambino '+val+' Nome Cognome:</label> <input class="form-control booking_inp_textbox_style" type="text" name="guestnamesbabies[]"/></div>');
   }
 }
+
+
+  /*$('.mapmarkblucls').click({
+    $('#bookingStopedModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+  });
+  $('.mapmarkorangecls').click({
+    $('#bookingStopedModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+  });*/
+
+
+  $(".mapmarkblucls").click(function(){
+    $('#bookingHotels').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+  });
+
+  $(".reserved").click(function(){
+    $('#bookingReserved').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+  });
+

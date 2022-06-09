@@ -32,7 +32,7 @@ Route::get('/privacy', [App\Http\Controllers\PagesController::class, 'privacyvie
 Route::get('/404', [App\Http\Controllers\PagesController::class, 'error404'])->name('error.404');
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'App\Http\Controllers\PagesController@viewsmallplace')->name('home');
 
 Route::get('/contact', [App\Http\Controllers\PagesController::class, 'contact'])->name('user.contact');
 
@@ -43,9 +43,13 @@ Route::group(['prefix' => 'admin'], function(){
     Route::get('/', [App\Http\Controllers\AdminPagesController::class, 'dashboard'])->name('admin');
     Route::post('/', [App\Http\Controllers\AdminPagesController::class, 'dashboard'])->name('admin');
 
+    Route::post('/place/submit', [App\Http\Controllers\AdminPagesController::class, 'submitplace_search'])->name('admin.place.submit');
+    Route::post('/place/quickbooking', [App\Http\Controllers\AdminPagesController::class, 'quickbooking'])->name('admin.place.quickbooking');
     Route::get('/place/viewplaces', [App\Http\Controllers\AdminPagesController::class, 'place_view'])->name('admin.place.viewplaces');
     Route::get('/place/create', [App\Http\Controllers\AdminPagesController::class, 'place_create'])->name('admin.place.create');
     Route::get('/place/status/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeStatus'])->name('admin.place.changestatus');
+    Route::get('/place/status-reserved/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeReserved'])->name('admin.place.changereserved');
+     Route::get('/place/status-hotels/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeHotels'])->name('admin.place.changehotels');
     Route::post('/place/create', [App\Http\Controllers\AdminPagesController::class, 'place_store'])->name('admin.place.store');
     Route::post('/place/edit/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'place_update'])->name('admin.place.update');
     Route::get('/place/edit/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'place_edit'])->name('admin.place.edit');
@@ -73,7 +77,7 @@ Route::group(['prefix' => 'admin'], function(){
 
     Route::get('/promocodes', [App\Http\Controllers\AdminPagesController::class, 'promocodesviews'])->name('admin.promocodes');
     Route::get('/promocodes/create', [App\Http\Controllers\AdminPagesController::class, 'promocodesviewcreate'])->name('admin.promocodes.create');
-    Route::post('/promocodes/create', [App\Http\Controllers\AdminPagesController::class, 'promocodesviewstore'])->name('admin.promocodes.store');
+    Route::post('/promocodes/edit/add', [App\Http\Controllers\AdminPagesController::class, 'promocodeadd'])->name('admin.promocodes.add');
     Route::get('/promocodes/{id}', [App\Http\Controllers\AdminPagesController::class, 'promocodechange'])->name('admin.promocodes.change');
     Route::get('/promocodes/edit/{id}', [App\Http\Controllers\AdminPagesController::class, 'promocodeedit'])->name('admin.promocodes.edit');
     Route::post('/promocodes/edit/update', [App\Http\Controllers\AdminPagesController::class, 'promocodeupdate'])->name('admin.promocodes.update');
@@ -86,9 +90,15 @@ Route::group(['prefix' => 'admin'], function(){
     Route::get('/staffs/edit/{id}', [App\Http\Controllers\AdminPagesController::class, 'staffseditview'])->name('admin.staffs.edit');
     Route::get('/staffs/delete/{id}', [App\Http\Controllers\AdminPagesController::class, 'staffsdelete'])->name('admin.staffs.delete');
 
+     Route::get('/users', [App\Http\Controllers\AdminPagesController::class, 'usersview'])->name('admin.users');
+    Route::get('/users/edit/{id}', [App\Http\Controllers\AdminPagesController::class, 'userseditview'])->name('admin.users.edit');
+    Route::get('/users/delete/{id}', [App\Http\Controllers\AdminPagesController::class, 'usersdelete'])->name('admin.users.delete');
+
+
 
     Route::get('/settings', [App\Http\Controllers\AdminPagesController::class, 'settingsview'])->name('admin.settings');
     Route::post('/settings/update', [App\Http\Controllers\AdminPagesController::class, 'settingsupdate'])->name('admin.settings.update');
+    Route::post('/settings/updateprices', [App\Http\Controllers\AdminPagesController::class, 'settingsupdateprices'])->name('admin.settings.update.prices');
 
     Route::get('/settings/price', [App\Http\Controllers\AdminPagesController::class, 'pricesettingsview'])->name('admin.settings.price');
 

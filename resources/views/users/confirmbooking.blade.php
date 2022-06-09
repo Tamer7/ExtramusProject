@@ -9,7 +9,7 @@
       </div> --}}
       <div class="col-sm-6 offset-sm-3">
         {{-- booking form --}}
-        <h2>Negombo {{ __('Booking Reservation') }}</h2>
+        <h2>Spiaggia San Montano, {{ __('Booking Reservation') }}</h2>
         <hr>
         <div class="card">
           <div class="card-body">
@@ -102,18 +102,18 @@
                     <td colspan="2"><span><strong>{{ __('Payment Type') }}: </strong></span></td>
                     <td colspan="2"><span>{{ $maparray['booking']->user_payment_type }}</span></td>
                   </tr>
-                  <tr>
+                 <tr>
                     <td colspan="2"><span><strong>{{ __('Total Price') }}: </strong></span></td>
                     <td colspan="2"><span>{{ $maparray['place']->price }} €</span></td>
                   </tr>
-                  {{-- <tr>
+                 {{--   <tr>
                     <td colspan="2"><span><strong>{{ __('Price paid now') }}: </strong></span></td>
-                    <td colspan="2"><span>300 €</span></td>
-                  </tr> --}}
-                  {{-- <tr>
+                    <td colspan="2"><span>500 €</span></td>
+                  </tr>--}}
+                    {{-- <tr>
                     <td colspan="2"><span><strong>{{ __('Remaining price') }}: </strong></span></td>
-                    <td colspan="2"><span>{{ $maparray['place']->price-300 }} €</span></td>
-                  </tr> --}}
+                    <td colspan="2"><span>{{ $maparray['place']->price-500 }} €</span></td>
+                  </tr>--}}
 
                   @isset($maparray['booking']->user_promo)
                     @if ($maparray['booking']->user_promo == "0")

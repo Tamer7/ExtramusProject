@@ -20,6 +20,28 @@
 
                             </div>
                         </div>
+												                        <div class="form-group row">
+                            <label for="discount" class="col-md-4 col-form-label text-md-right">Max Reservations</label>
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" name="max_reservation" value="{{ $set_admin->max_reservation }}" required>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+							<label class="col-md-4 col-form-label text-md-right" for="days-option">Choose a Day:</label>
+                            <div class="col-md-6">
+								<select class="form-control" name="days" id="days-option">
+                                        <option class="form-control" value="1" <?php if($set_admin->day == "1") {echo "selected";}?>>Day 1</option>
+                                        <option class="form-control" value="2" <?php if($set_admin->day == "2") {echo "selected";}?>>Day 2</option>
+                                        <option class="form-control" value="3" <?php if($set_admin->day == "3") {echo "selected";}?>>Day 3</option>
+									
+									                                        <option class="form-control" value="4" <?php if($set_admin->day == "4") {echo "selected";}?>>Daily</option>
+							    </select>
+                        </div>
+
+                        </div>
                         <div class="form-group row">
                             <label for="closing_time" class="col-md-4 col-form-label text-md-right">{{ __('Closing Time') }}</label>
                             <div class="col-md-6">
