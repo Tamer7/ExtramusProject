@@ -103,7 +103,7 @@ class AdminPagesController extends Controller
         if (isset($request->guestnamesbabies[3]))
           $booking->baby_surname4 = $request->guestnamesbabies[3];
 
-        $booking->user_booking_tracking_id = uniqid('negombo_', true);
+        $booking->user_booking_tracking_id = uniqid('Spiaggia_San_Montano_', true);
         $booking->user_payment_type = $request->user_payment_type;
         if ($booking->user_payment_type == "Admin") {
           $booking->user_payment_type = 'Admin';
@@ -194,7 +194,6 @@ class AdminPagesController extends Controller
           continue;
         }
         $place->status = $booking->place_is_available($place->place_id, $startDate, $endDate);
-        -$place->status = $booking->place_is_available($place->place_id, $startDate, $endDate);
         $place->status = $booking->place_is_available_subs($place->place_id, $startDate, $endDate, $place->status);
       }
 
@@ -215,6 +214,7 @@ class AdminPagesController extends Controller
     $booking = new Booking;
     // $Todaydate = date('Y-m-d');
     foreach ($places as $place) {
+      $place->stato = $place->status;
       if ($place->status == -1) {
         continue;
       }
@@ -270,7 +270,24 @@ class AdminPagesController extends Controller
     $user->delete();
     return redirect()->route('admin.staffs');
   }
+   public function usersdelete($id)
+  {
+    if (Auth::user()->role != "admin")
+      return redirect()->route('error.404');
+    $user = User::find($id);
+    $user->delete();
+    return redirect()->route('admin.users');
+  }
   public function staffseditview($id)
+  {
+    if (!Auth::user())
+      return redirect()->route('error.404');
+    $user = User::find($id);
+    if (is_null($user))
+      return redirect()->route('error.404');
+    return view('adminpages.editstaff')->with('user', $user);
+  }
+  public function userseditview($id)
   {
     if (!Auth::user())
       return redirect()->route('error.404');
@@ -285,6 +302,9 @@ class AdminPagesController extends Controller
     $user = User::find($user_id);
     $user->name = $request->name;
     $user->email = $request->email;
+    //$user->address = $request->address;
+    $user->phone = $request->phone;
+    $user->black_list = $request->blacklist;
     $user->role = $request->role;
     $user->save();
     return redirect()->route('admin.staffs');
@@ -337,8 +357,11 @@ class AdminPagesController extends Controller
     $set_admin->adult2_price_weekend = $request->weekend_adult2_price;
     $set_admin->adult3_price_weekend = $request->weekend_adult3_price;
     $set_admin->adult4_price_weekend = $request->weekend_adult4_price;
+	//$set_admin->day = $request->days;
+	  
+	      $set_admin->save();
+	  
 
-    $set_admin->save();
 
     return redirect()->route('admin.settings.price');
   }
@@ -350,17 +373,21 @@ class AdminPagesController extends Controller
       return redirect()->route('error.404');
     $set_admin = SettingAdmin::find($request->id)->first();
     $set_admin->max_no_days = $request->max_no_days;
+	$set_admin->max_reservation = $request->max_reservation;
     $set_admin->closing_time = $request->closing_time;
     $set_admin->daily_fee = $request->daily_fee;
     $set_admin->booking_start = $request->starting_time;
     $set_admin->booking_end = $request->ending_time;
     $set_admin->season_start = $request->season_start;
     $set_admin->season_end = $request->season_end;
+	$set_admin->day = $request->days;
+	  
+
 
 
     $set_admin->save();
 
-    return redirect()->route('admin');
+    return redirect()->route('admin.settings');
   }
 
 
@@ -368,8 +395,16 @@ class AdminPagesController extends Controller
   {
     if (Auth::user()->role != "admin")
       return redirect()->route('error.404');
-    $users = User::orderBy('id')->get();
+   $users = User::orderBy('id')->where('role','<>','user')->get();
     return view('adminpages.viewstaffs')->with('users', $users);
+  }
+
+  public function usersview()
+  {
+    if (Auth::user()->role != "admin")
+      return redirect()->route('error.404');
+    $users = User::orderBy('id')->where('role','=','user')->get();
+    return view('adminpages.viewusers')->with('users', $users);
   }
 
   public function promocodesviews()
@@ -723,6 +758,33 @@ class AdminPagesController extends Controller
     } else {
       $place->status = -1;
     }
+    $place->save();
+    return redirect()->route('admin.place.viewplaces');
+  }
+
+
+  public function changeReserved($place_id)
+  {
+    $place = Place::where('place_id', $place_id)->first();
+
+    if ($place->status == 0 ||  $place->status == 3 || $place->status == -1) {
+      $place->status = 1;
+    }
+
+    $place->save();
+    return redirect()->route('admin.place.viewplaces');
+  }
+
+
+  public function changeHotels($place_id)
+  {
+    $place = Place::where('place_id', $place_id)->first();
+
+
+    if ($place->status == 0 ||  $place->status == 1 || $place->status == -1) {
+      $place->status = 3;
+    } 
+
     $place->save();
     return redirect()->route('admin.place.viewplaces');
   }

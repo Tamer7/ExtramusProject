@@ -32,7 +32,7 @@ Route::get('/privacy', [App\Http\Controllers\PagesController::class, 'privacyvie
 Route::get('/404', [App\Http\Controllers\PagesController::class, 'error404'])->name('error.404');
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'App\Http\Controllers\PagesController@viewsmallplace')->name('home');
 
 Route::get('/contact', [App\Http\Controllers\PagesController::class, 'contact'])->name('user.contact');
 
@@ -48,6 +48,8 @@ Route::group(['prefix' => 'admin'], function(){
     Route::get('/place/viewplaces', [App\Http\Controllers\AdminPagesController::class, 'place_view'])->name('admin.place.viewplaces');
     Route::get('/place/create', [App\Http\Controllers\AdminPagesController::class, 'place_create'])->name('admin.place.create');
     Route::get('/place/status/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeStatus'])->name('admin.place.changestatus');
+    Route::get('/place/status-reserved/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeReserved'])->name('admin.place.changereserved');
+     Route::get('/place/status-hotels/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'changeHotels'])->name('admin.place.changehotels');
     Route::post('/place/create', [App\Http\Controllers\AdminPagesController::class, 'place_store'])->name('admin.place.store');
     Route::post('/place/edit/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'place_update'])->name('admin.place.update');
     Route::get('/place/edit/{place_id}', [App\Http\Controllers\AdminPagesController::class, 'place_edit'])->name('admin.place.edit');
@@ -87,6 +89,11 @@ Route::group(['prefix' => 'admin'], function(){
     Route::get('/staffs', [App\Http\Controllers\AdminPagesController::class, 'staffsview'])->name('admin.staffs');
     Route::get('/staffs/edit/{id}', [App\Http\Controllers\AdminPagesController::class, 'staffseditview'])->name('admin.staffs.edit');
     Route::get('/staffs/delete/{id}', [App\Http\Controllers\AdminPagesController::class, 'staffsdelete'])->name('admin.staffs.delete');
+
+     Route::get('/users', [App\Http\Controllers\AdminPagesController::class, 'usersview'])->name('admin.users');
+    Route::get('/users/edit/{id}', [App\Http\Controllers\AdminPagesController::class, 'userseditview'])->name('admin.users.edit');
+    Route::get('/users/delete/{id}', [App\Http\Controllers\AdminPagesController::class, 'usersdelete'])->name('admin.users.delete');
+
 
 
     Route::get('/settings', [App\Http\Controllers\AdminPagesController::class, 'settingsview'])->name('admin.settings');

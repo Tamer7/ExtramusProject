@@ -26,7 +26,9 @@
                         <th>Price 2</th>
                         <th>Price 3</th>
                         <th>Price 4</th>
+
                         @if (Auth::user()->role == "admin")
+                          <th>Stato</th>
                           <th>Action</th>
                         @endif
                         <th>Booking</th>
@@ -43,19 +45,34 @@
                         <td>{{ $place->price2 }} €</td>
                         <td>{{ $place->price3 }} €</td>
                         <td>{{ $place->price4 }} €</td>
+
                         @if (Auth::user()->role == "admin")
+                          <td>
+                            @if($place->stato == 1)
+                                <b>Riservato</b>
+                            @elseif($place->stato == 3)
+                                <b>Hotels</b>
+                            @elseif($place->stato == -1)
+                                <b>Disabilitato</b>
+                            @elseif($place->stato == 0)
+                                <b>Attivo</b>
+                            @endif
+                          </td>
                           <td> <a href="{{ route('admin.place.edit', $place->place_id) }}">Edit</a> /
-                            @if ($place->status == -1)
+                             @if ($place->status == -1)
                               <a href="{{ route('admin.place.changestatus', $place->place_id) }}">Activate</a>
-                            @else
+                            @elseif ($place->status == 0 || $place->status == 1 || $place->status == 3)
+                              <a href="{{ route('admin.place.changereserved', $place->place_id) }}">Riservato</a> /
+                              <a href="{{ route('admin.place.changehotels', $place->place_id) }}">Hotels</a> /
                               <a href="{{ route('admin.place.changestatus', $place->place_id) }}">Deactivate</a>
                             @endif
+
 
                           </td>
                         @endif
                         <td>{{-- status print --}}
 
-                          @if ($place->status==0)
+                          @if ($place->status==0 || $place->status == 1 || $place->status == 2)
                           <!-- Trigger the modal with a button -->
                           <a href="#" data-toggle="modal" data-target="#myModal{{ $place->place_id }}">Quick Book</a>
 

@@ -102,18 +102,20 @@
                       <td colspan="2"><span>{{ $maparray['booking']->user_payment_type }}</span></td>
                     </tr>
 
-                    <tr>
+                    
+                   {{-- <tr>
+                      <td colspan="2"><span><strong>{{ __('Price paid now') }}: </strong></span></td>
+                      <td colspan="2"><span>500 €</span></td>
+                    </tr> --}}
+				     <tr> 
                       <td colspan="2"><span><strong>{{ __('Total Price') }}: </strong></span></td>
                       <td colspan="2"><span>{{ $maparray['place']->price }} €</span></td>
-                    </tr>
+                    </tr> 
                     {{-- <tr>
-                      <td colspan="2"><span><strong>{{ __('Price paid now') }}: </strong></span></td>
-                      <td colspan="2"><span>300 €</span></td>
-                    </tr>
-                    <tr>
                       <td colspan="2"><span><strong>{{ __('Remaining price') }}: </strong></span></td>
-                      <td colspan="2"><span>{{ $maparray['place']->price-300 }} €</span></td>
+                      <td colspan="2"><span>{{ $maparray['place']->price-1000 }} €</span></td>
                     </tr> --}}
+               
                 </table>
 
 
